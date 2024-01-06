@@ -27,7 +27,7 @@ class AuthServices with ChangeNotifier {
   bool isLoading = false;
   String status = "";
   String message = "";
-  String baseUrl = "http://localhost:5000/api";
+  String baseUrl = "http://localhost:8000";
 
   Future sendOTPToEmail({
     BuildContext? context,
@@ -38,8 +38,8 @@ class AuthServices with ChangeNotifier {
     String? confirmPassword,
     bool isResend = false,
   }) async {
-    SharedPreferences sf = await SharedPreferences.getInstance();
-    String url = "$baseUrl/utility/sendOTPToEmail";
+
+    String url = "$baseUrl/mail/sendOTPToEmail";
 
     isLoading = true;
     notifyListeners();
@@ -70,7 +70,7 @@ class AuthServices with ChangeNotifier {
     }
   }
 
-  Future signUp({
+  Future UploadFile({
     BuildContext? context,
     String? firstName,
     String? lastName,
@@ -80,7 +80,46 @@ class AuthServices with ChangeNotifier {
     File? image,
   }) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
-    String url = "$baseUrl/auth/verifyOTPAndRegister";
+    String url = "$baseUrl/gcp/upload";
+
+    isLoading = true;
+    notifyListeners();
+    var response = await http.post(
+      Uri.parse(url),
+      body: {
+        "file": image.toString(),
+      },
+    );
+    print(response.body);
+    print("=================================================");
+    var dataRes = jsonDecode(response.body);
+    print(dataRes);
+    if (response.statusCode == 200) {
+      isLoading = false;
+        notifyListeners();
+        SharedPreferencesService(sf).setToken(dataRes["token"]);
+        nextPageOnly(context!, page: LoginScreen());
+        successSnackBar(context, dataRes["message"]);
+    } else {
+      isLoading = false;
+      notifyListeners();
+      errorSnackBar(context!, dataRes["message"]);
+    }
+  }
+
+  Future signUp({
+    BuildContext? context,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? password,
+    String? confirmPassword,
+    String? url,
+    String? fileName,
+    String? originalFileName,
+  }) async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    String url = "$baseUrl/auth/register";
 
     isLoading = true;
     notifyListeners();
@@ -92,7 +131,9 @@ class AuthServices with ChangeNotifier {
         "email": email,
         "password": password,
         "confirmPassword": confirmPassword,
-        "file": image.toString(),
+        "url": url,
+        "fileName": fileName,
+        "originalFileName": originalFileName,
       },
     );
     print(response.body);
@@ -119,7 +160,7 @@ class AuthServices with ChangeNotifier {
   }) async {
     isLoading = true;
     notifyListeners();
-    String url = "https://staging-cafia-8ac864534ee4.herokuapp.com/api/auth/login";
+    String url = "$baseUrl/auth/login";
     SharedPreferences sf = await SharedPreferences.getInstance();
 
     var response = await http.post(
@@ -161,7 +202,7 @@ class AuthServices with ChangeNotifier {
   }) async {
     isLoading = true;
     notifyListeners();
-    String url = "https://staging-cafia-8ac864534ee4.herokuapp.com/api/auth/forgotPassword";
+    String url = "$baseUrl/mail/forgotPassword";
     SharedPreferences sf = await SharedPreferences.getInstance();
 
     var response = await http.post(
@@ -203,7 +244,49 @@ class AuthServices with ChangeNotifier {
   }) async {
     isLoading = true;
     notifyListeners();
-    String url = "https://staging-cafia-8ac864534ee4.herokuapp.com/api/auth/resetPassword";
+    String url = "$baseUrl/auth/resetPassword";
+    SharedPreferences sf = await SharedPreferences.getInstance();
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: {
+        "email": email,
+        "otp": otp,
+      },
+      headers: {
+        'Accept': 'application/json',
+      },
+    );
+    isLoading = false;
+    notifyListeners();
+    print(response.body);
+    var dataRes = jsonDecode(response.body);
+    print(response.statusCode);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      isLoading = false;
+      notifyListeners();
+      successSnackBar(context!, "Verification Successful");
+      nextPageAndRemovePrevious(context, page: const LoginScreen());
+    } else if (response.statusCode == 400) {
+      isLoading = false;
+      notifyListeners();
+
+      errorSnackBar(context!, dataRes["message"]);
+    } else {
+      isLoading = false;
+      notifyListeners();
+      errorSnackBar(context!, "Something went wrong");
+    }
+  }
+
+  Future verifyEmail({
+    String? email,
+    String? otp,
+    BuildContext? context,
+  }) async {
+    isLoading = true;
+    notifyListeners();
+    String url = "$baseUrl/auth/verifyEmail";
     SharedPreferences sf = await SharedPreferences.getInstance();
 
     var response = await http.post(

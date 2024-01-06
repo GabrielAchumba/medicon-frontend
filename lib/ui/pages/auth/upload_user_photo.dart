@@ -112,7 +112,7 @@ class _UploadUserPhotoViewState extends State<UploadUserPhotoView> {
                     textColor: AppColors.white,
                     fontWeight: FontWeight.w600, 
                     onTap: () {
-                      authProvider.signUp(
+                      authProvider.UploadFile(
                         context: ctx,
                         firstName: widget.firstName,
                         lastName: widget.lastName,
@@ -130,15 +130,23 @@ class _UploadUserPhotoViewState extends State<UploadUserPhotoView> {
 
   Future getImageGallery() async {
     Utils.offKeyboard();
+    print("SEEN 1");
     FilePickerResult? _result = await FilePicker.platform.pickFiles(type: FileType.image);
+    print("SEEN 2");
 
     if (_result?.files.first.path != null) {
+      print("_result!.files.first.path");
+      print("_result?.files.first.path");
       // _imageFile = File(_result!.files.first.path!);
       // setState(() {});
       final croppedFile =
-          await cropImage(context, file: File(_result!.files.first.path!), color: AppColors.orange);
+          await cropImage(context, file: File(_result!.files.first.path!), color: AppColors.darkGreen);
       if ((croppedFile?.path ?? "").isNotEmpty) {
+        print("croppedFile?.path");
+        print(croppedFile?.path);
         _imageFile = File(croppedFile!.path);
+        print("_imageFile");
+        print(_imageFile);
         setState(() {});
       }
     } else {
