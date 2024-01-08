@@ -31,11 +31,13 @@ class _LoginScreenState extends State<LoginScreen> {
   String selectedCountry = "";
   bool _passwordVisible = false;
   bool isForgotPasswordVisible = false;
+  bool removeImage = true;
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       title: '',
+      removeImage: removeImage,
       child: ListView(
         padding: EdgeInsets.all(20.h),
         children: [

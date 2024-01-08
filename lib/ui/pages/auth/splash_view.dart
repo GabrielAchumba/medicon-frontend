@@ -21,7 +21,6 @@ class _SplashViewState extends State<SplashView> {
   String? mtoken = "";
   @override
   void initState() {
-    hasAccount();
     Future.delayed(const Duration(seconds: 2), () {
       // pushReplacement(context, const OnboardingView());
       // locator.get<NotificationService>().initializePN();
@@ -38,8 +37,9 @@ class _SplashViewState extends State<SplashView> {
       // }
     }
     );
-    sendPushMessage(mtoken.toString());
+    //(mtoken.toString());
     // getToken();
+    hasAccount();
     super.initState();
   }
 
@@ -47,13 +47,15 @@ class _SplashViewState extends State<SplashView> {
     SharedPreferences sf = await SharedPreferences.getInstance();
     String? token = sf.getString("token");
     print(token);
-    if(token == null){
+    
+    pushReplacement(context, const OnboardingView());
+    /* if(token == null || token == ""){
       pushReplacement(context, const OnboardingView());
     }
     else{
       //pushReplacement(context, const MainLayout());
       pushReplacement(context, const Placeholder());
-    }
+    } */
   }
 
   void requestPermission() async {
@@ -77,7 +79,7 @@ class _SplashViewState extends State<SplashView> {
     // }
   }
 
-  void sendPushMessage(String token) async {
+  /* void sendPushMessage(String token) async {
     try {
       await http.post(Uri.parse("https://fcm.googleapis.com/fcm/send"),
           headers: <String, String>{
@@ -103,7 +105,7 @@ class _SplashViewState extends State<SplashView> {
     } catch (e) {
       print("cant send a notification");
     }
-  }
+  } */
 
   // void getTokenFromFirestore() async {}
   // void getToken() async {

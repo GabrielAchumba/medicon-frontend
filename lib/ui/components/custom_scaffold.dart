@@ -25,7 +25,7 @@ class CustomScaffold extends StatelessWidget {
     return GestureDetector(
       onTap: () => Utils.offKeyboard(),
       child: Scaffold(
-        backgroundColor: AppColors.lemon,
+        backgroundColor: AppColors.white,
         extendBodyBehindAppBar: true,
         appBar: title == null
             ? null

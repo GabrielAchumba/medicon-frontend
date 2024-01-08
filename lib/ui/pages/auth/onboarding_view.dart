@@ -121,7 +121,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                         ),
                       ),
                       buttonWithBorder(
-                        'Login to your account',
+                        buttonItems()[_index].up,
                         buttonColor: AppColors.darkGreen,
                         fontSize: 15.sp,
                         height: 56.h,
@@ -140,7 +140,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                       ),
                       SizedBox(height: 20.h),
                       buttonWithBorder(
-                        'Sign up your account',
+                        buttonItems()[_index].down,
                         buttonColor: AppColors.lightGrey,
                         fontSize: 15.sp,
                         height: 56.h,
@@ -168,6 +168,30 @@ class _OnboardingViewState extends State<OnboardingView> {
       ),
     );
   }
+}
+
+class ButtonItem {
+  String up;
+  String down;
+
+  ButtonItem({required this.up,
+  required this.down});
+}
+List<ButtonItem> buttonItems() {
+  return [
+    ButtonItem(
+      up: 'Next',
+      down: 'Skip'
+    ),
+    ButtonItem(
+      up: 'Next',
+      down: 'Skip'
+    ),
+    ButtonItem(
+      up: 'Login to your account',
+      down: 'Sign up your account'
+    ),
+  ];
 }
 
 class Item {

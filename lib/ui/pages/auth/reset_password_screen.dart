@@ -100,7 +100,11 @@ class _ResetPasswordState extends State<ResetPassword> {
                     textColor: AppColors.white,
                     fontWeight: FontWeight.w600, onTap: () {
 
-                      nextPage(context, page: const LoginScreen());
+                    provider.resetPassword(
+                        password: password.text,
+                        confirmPassword: confirmPassword.text,
+                        context: context,
+                      );
                     }
                 );
               }

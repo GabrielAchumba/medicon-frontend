@@ -20,26 +20,17 @@ import 'package:provider/provider.dart';
 import '../../../locator.dart';
 //import '../../../services/unique/notifications_service.dart';
 
-class VerifyEmailView extends StatefulWidget {
- 
-  final String firstName;
-  final String lastName;
+class VerifyForgotPasswordView extends StatefulWidget {
   final String email;
-  final String password;
-  final String confirmPassword;
 
 
-  const VerifyEmailView(this.email,
-  this.firstName,
-  this.lastName,
-  this.password,
-  this.confirmPassword, 
+  const VerifyForgotPasswordView(this.email,
   {super.key});
   @override
-  _VerifyEmailViewState createState() => _VerifyEmailViewState();
+  _VerifyForgotPasswordViewState createState() => _VerifyForgotPasswordViewState();
 }
 
-class _VerifyEmailViewState extends State<VerifyEmailView> {
+class _VerifyForgotPasswordViewState extends State<VerifyForgotPasswordView> {
   TextEditingController code = TextEditingController();
 
   Timer? countdown;
@@ -106,13 +97,9 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                 textColor: AppColors.white,
                 fontWeight: FontWeight.w600,
                 busy: provider.isLoading, onTap: () {
-              provider.verifyEmail(
+              provider.verifyEmailForgotPassword(
                   context: context,
-                  firstName: widget.firstName,
-                  lastName: widget.lastName,
                   email: widget.email,
-                  password: widget.password,
-                  confirmPassword: widget.confirmPassword,
                   otp: code.text,
                 );
             }),
@@ -152,13 +139,9 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                                 isResend: true,
                               ); */
 
-                              provider.verifyEmail(
+                              provider.verifyEmailForgotPassword(
                                 context: context,
-                                firstName: widget.firstName,
-                                lastName: widget.lastName,
                                 email: widget.email,
-                                password: widget.password,
-                                confirmPassword: widget.confirmPassword,
                                 otp: code.text,
                               );
                             }
@@ -176,69 +159,4 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   bool isLoading = false;
 
   verifyOtp() async {}
-
-  // verifyNumber() async {
-  //   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  //
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   String smsCode = code.text.trim();
-  //
-  //   PhoneAuthCredential _credential = PhoneAuthProvider.credential(
-  //       verificationId: widget.token, smsCode: smsCode);
-  //
-  //   try {
-  //     final UserCredential result =
-  //         await _firebaseAuth.signInWithCredential(_credential);
-  //
-  //     if (result.user != null) {
-  //       result.user!.updatePhotoURL(widget.country).then((value) {
-  //         setState(() {
-  //           isLoading = false;
-  //         });
-  //         addFcm();
-  //         pushAndRemoveUntil(context, const MainLayout());
-  //       });
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //     errorSnackBar(context, e.message!);
-  //   } on PlatformException catch (e) {
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //     errorSnackBar(context, e.message!);
-  //   } catch (e) {
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //     errorSnackBar(context, e.toString());
-  //   }
-  // }
-
-  // Future<bool> addFcm() async {
-  //   const api = 'https://cafiabackend.herokuapp.com/api/user/store';
-  //   String? fcmToken = await locator.get<NotificationService>().getFirebaseToken();
-  //
-  //   String? tokens = await locator.get<FirebaseAuthService>().currentUserRaw?.getIdToken();
-  //   http.Response response = await http.post(
-  //     Uri.parse(api),
-  //     body: {
-  //       'fcm': fcmToken,
-  //     },
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Authorization': 'Bearer $tokens',
-  //     },
-  //   );
-  //
-  //   if (response.statusCode == 200) {
-  //     return true;
-  //   }
-  //
-  //   return false;
-  // }
 }

@@ -7,6 +7,7 @@ import 'package:medicon/services/auth_services/auth_provider.dart';
 import 'package:medicon/ui/components/buttons.dart';
 import 'package:medicon/ui/components/custom_scaffold.dart';
 import 'package:medicon/ui/components/custom_textfield.dart';
+import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
 import 'package:medicon/ui/pages/auth/login.dart';
 import 'package:medicon/ui/utils/colors.dart';
@@ -25,12 +26,12 @@ class UploadUserPhotoView extends StatefulWidget {
   final String password;
   final String confirmPassword;
 
-  const UploadUserPhotoView({super.key, 
-  required this.firstName, 
-  required this.lastName,
-  required this.email, 
-  required this.password,
-  required this.confirmPassword});
+  const UploadUserPhotoView(this.email,
+  this.firstName,
+  this.lastName,
+  this.password,
+  this.confirmPassword, 
+  {super.key});
 
   @override
   _UploadUserPhotoViewState createState() => _UploadUserPhotoViewState();
@@ -39,9 +40,12 @@ class UploadUserPhotoView extends StatefulWidget {
 class _UploadUserPhotoViewState extends State<UploadUserPhotoView> {
   final TextEditingController _bio = TextEditingController();
   File? _imageFile;
-
+  List<int>? imageBytes;
+  String? imageName;
+  BuildContext? _context;
   @override
   Widget build(BuildContext context) {
+    _context = context;
     return CustomScaffold(
         title: '',
         child: ListView(
@@ -119,7 +123,8 @@ class _UploadUserPhotoViewState extends State<UploadUserPhotoView> {
                         email: widget.email,
                         password: widget.password,
                         confirmPassword: widget.confirmPassword,
-                        image: _imageFile!,
+                        imageBytes: imageBytes!,
+                        imageName: imageName!,
                       );
                 });
             }),
@@ -129,12 +134,33 @@ class _UploadUserPhotoViewState extends State<UploadUserPhotoView> {
   }
 
   Future getImageGallery() async {
+    // * Pick a File
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    if (result != null) {
+      // * cast it to bytes
+      imageBytes = result.files.single.bytes!.cast();
+      // * Get its name, will use it later.
+      imageName = result.files.single.name;
+
+      successSnackBar(_context!, "File reading very successful");
+    }else{
+      errorSnackBar(_context!, "File reading failed, please try again");
+    }
+}
+
+  Future getImageGallery2() async {
     Utils.offKeyboard();
     print("SEEN 1");
     FilePickerResult? _result = await FilePicker.platform.pickFiles(type: FileType.image);
-    print("SEEN 2");
+    
+    var fileBytes = _result?.files.first.bytes;
+    var fileName = _result?.files.first.name;
+    print("fileName ${fileName}");
+    print("fileBytes ${fileBytes}");
+    
 
-    if (_result?.files.first.path != null) {
+    if (fileBytes != null) {
       print("_result!.files.first.path");
       print("_result?.files.first.path");
       // _imageFile = File(_result!.files.first.path!);

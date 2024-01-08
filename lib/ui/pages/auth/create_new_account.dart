@@ -35,11 +35,13 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
   bool _confirmPasswordVisible = false;
   bool isForgotPasswordVisible = false;
   bool accept = false;
+  bool removeImage = true;
   
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       title: '',
+      removeImage: removeImage,
       child: ListView(
         padding: EdgeInsets.all(20.h),
         children: [
@@ -201,12 +203,6 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                 } else if (accept == false) {
                   errorSnackBar(context, 'Agree to the terms and conditions');
                 } else {
-                  //pushReplacement(context, const Placeholder());
-                  /*  TextEditingController firstName = TextEditingController();
-    TextEditingController lastName = TextEditingController();
-    TextEditingController email = TextEditingController();
-    TextEditingController password = TextEditingController();
-    TextEditingController confirmPassword = TextEditingController(); */
                   authProvider.sendOTPToEmail(
                     context: ctx,
                     firstName: firstName.text,

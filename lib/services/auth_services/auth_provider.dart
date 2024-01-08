@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:http_parser/http_parser.dart';
+import 'package:dio/dio.dart';
 
 /* import 'package:cafia/services/common/shared_preferences_service.dart';
 import 'package:cafia/ui/components/snackbar.dart';
@@ -16,7 +18,10 @@ import 'package:http/http.dart' as http;
 import 'package:medicon/services/common/shared_preferences_service.dart';
 import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/ui/pages/auth/login.dart';
+import 'package:medicon/ui/pages/auth/reset_password_screen.dart';
+import 'package:medicon/ui/pages/auth/upload_user_photo.dart';
 import 'package:medicon/ui/pages/auth/verify_email_view.dart';
+import 'package:medicon/ui/pages/auth/verify_forgot_password.dart';
 //import 'package:medicon/ui/pages/auth/signup3_view.dart';
 import 'package:medicon/ui/pages/auth/verify_view.dart';
 //import 'package:medicon/ui/pages/home/main_layout.dart';
@@ -28,6 +33,10 @@ class AuthServices with ChangeNotifier {
   String status = "";
   String message = "";
   String baseUrl = "http://localhost:8000";
+  late final Dio _dio;
+
+  AuthServices() : _dio = Dio();
+  BuildContext? _context;
 
   Future sendOTPToEmail({
     BuildContext? context,
@@ -38,7 +47,7 @@ class AuthServices with ChangeNotifier {
     String? confirmPassword,
     bool isResend = false,
   }) async {
-
+    SharedPreferences sf = await SharedPreferences.getInstance();
     String url = "$baseUrl/mail/sendOTPToEmail";
 
     isLoading = true;
@@ -49,13 +58,16 @@ class AuthServices with ChangeNotifier {
         "email": email,
       },
     );
-    print(response.body);
+  
     print("=================================================");
     var dataRes = jsonDecode(response.body);
     print(dataRes);
-    if (response.statusCode == 200) {
+    
+    if(dataRes["token"].toString().isNotEmpty){
+      print("SUCCESS");
       isLoading = false;
       notifyListeners();
+      SharedPreferencesService(sf).setToken(dataRes["token"]);
       if (isResend == true) {
         successSnackBar(context!, dataRes["message"]);
       } else {
@@ -63,14 +75,67 @@ class AuthServices with ChangeNotifier {
         lastName!, password!, confirmPassword!));
       }
       successSnackBar(context, dataRes["message"]);
-    } else {
+    }else{
+      print("ERROR");
       isLoading = false;
       notifyListeners();
       errorSnackBar(context!, dataRes["message"]);
     }
   }
 
+  
   Future UploadFile({
+    BuildContext? context,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? password,
+    String? confirmPassword,
+    List<int>? imageBytes,
+    String imageName = "",
+  }) async {
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    String url = "$baseUrl/gcp/upload";
+    _context = context;
+
+    String extension = imageName.split(".").last;
+
+    print("imageBytes: ${imageBytes}");
+    print("imageName: $imageName");
+    print("extension: $extension");
+
+    var formData = FormData.fromMap({
+      "file": MultipartFile.fromBytes(
+        imageBytes!,
+        filename: imageName,
+        contentType: MediaType("File", extension),
+      ),
+    });
+
+    isLoading = true;
+    notifyListeners();
+    var response = await _dio.post(url, data: formData);
+
+    print("test response");
+    print(response.data.toString());
+    print(response.statusCode);
+
+    String message = response.data["error"];
+    if(message == "No Error"){
+      String url = response.data["url"];
+      String fileName = response.data["fileName"];
+      String originalFileName = response.data["originalFileName"];
+      await signUp(firstName!,
+      lastName!, email!, password!,
+      confirmPassword!, url, fileName, originalFileName);
+    }else{
+      isLoading = false;
+      notifyListeners();
+      errorSnackBar(context!, response.data["error"]);
+    }
+  }
+
+  Future UploadFile2({
     BuildContext? context,
     String? firstName,
     String? lastName,
@@ -94,7 +159,7 @@ class AuthServices with ChangeNotifier {
     print("=================================================");
     var dataRes = jsonDecode(response.body);
     print(dataRes);
-    if (response.statusCode == 200) {
+    /* if (response.statusCode == 200) {
       isLoading = false;
         notifyListeners();
         SharedPreferencesService(sf).setToken(dataRes["token"]);
@@ -104,11 +169,11 @@ class AuthServices with ChangeNotifier {
       isLoading = false;
       notifyListeners();
       errorSnackBar(context!, dataRes["message"]);
-    }
+    } */
   }
 
-  Future signUp({
-    BuildContext? context,
+//  //BuildContext? context,
+  Future signUp(
     String? firstName,
     String? lastName,
     String? email,
@@ -116,10 +181,11 @@ class AuthServices with ChangeNotifier {
     String? confirmPassword,
     String? url,
     String? fileName,
-    String? originalFileName,
-  }) async {
+    String? originalFileName) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
+     String? tokens = sf.getString("token");
     String url = "$baseUrl/auth/register";
+
 
     isLoading = true;
     notifyListeners();
@@ -134,22 +200,27 @@ class AuthServices with ChangeNotifier {
         "url": url,
         "fileName": fileName,
         "originalFileName": originalFileName,
+        "department": "Nurse",
+      },
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
       },
     );
     print(response.body);
     print("=================================================");
     var dataRes = jsonDecode(response.body);
     print(dataRes);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading = false;
-        notifyListeners();
-        SharedPreferencesService(sf).setToken(dataRes["token"]);
-        nextPageOnly(context!, page: LoginScreen());
-        successSnackBar(context, dataRes["message"]);
+        notifyListeners();;
+        SharedPreferencesService(sf).setToken("");
+        nextPageOnly(_context!, page: LoginScreen());
+        successSnackBar(_context!, dataRes["message"]);
     } else {
       isLoading = false;
       notifyListeners();
-      errorSnackBar(context!, dataRes["message"]);
+      errorSnackBar(_context!, dataRes["message"]);
     }
   }
 
@@ -220,41 +291,40 @@ class AuthServices with ChangeNotifier {
     if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading = false;
       notifyListeners();
+      SharedPreferencesService(sf).setToken(dataRes["token"]);
       if (isResend == true) {
         successSnackBar(context!, "Otp Sent Successfully");
       } else {
-        nextPage(context!, page: VerifyView(email!));
+        nextPage(context!, page: VerifyForgotPasswordView(email!));
       }
       successSnackBar(context, "Otp Sent Successfully");
-    } else if (response.statusCode == 400 || response.statusCode == 404) {
-      isLoading = false;
-      notifyListeners();
-      errorSnackBar(context!, "User does not exist");
     } else {
       isLoading = false;
       notifyListeners();
-      errorSnackBar(context!, "Something went wrong");
+      errorSnackBar(context!, dataRes["message"]);
     }
   }
 
   Future resetPassword({
-    String? email,
-    String? otp,
+    String? password,
+    String? confirmPassword,
     BuildContext? context,
   }) async {
     isLoading = true;
     notifyListeners();
     String url = "$baseUrl/auth/resetPassword";
     SharedPreferences sf = await SharedPreferences.getInstance();
+    String? tokens = sf.getString("token");
 
     var response = await http.post(
       Uri.parse(url),
       body: {
-        "email": email,
-        "otp": otp,
+        "password": password,
+        "confirmPassword": confirmPassword,
       },
       headers: {
         'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
       },
     );
     isLoading = false;
@@ -267,27 +337,28 @@ class AuthServices with ChangeNotifier {
       notifyListeners();
       successSnackBar(context!, "Verification Successful");
       nextPageAndRemovePrevious(context, page: const LoginScreen());
-    } else if (response.statusCode == 400) {
+    } else {
       isLoading = false;
       notifyListeners();
 
       errorSnackBar(context!, dataRes["message"]);
-    } else {
-      isLoading = false;
-      notifyListeners();
-      errorSnackBar(context!, "Something went wrong");
-    }
+    } 
   }
 
   Future verifyEmail({
-    String? email,
-    String? otp,
     BuildContext? context,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? password,
+    String? confirmPassword,
+    String? otp,
   }) async {
     isLoading = true;
     notifyListeners();
     String url = "$baseUrl/auth/verifyEmail";
     SharedPreferences sf = await SharedPreferences.getInstance();
+    String? tokens = sf.getString("token");
 
     var response = await http.post(
       Uri.parse(url),
@@ -297,27 +368,67 @@ class AuthServices with ChangeNotifier {
       },
       headers: {
         'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
       },
     );
     isLoading = false;
     notifyListeners();
-    print(response.body);
+    print("Status Code ${response.statusCode}");
     var dataRes = jsonDecode(response.body);
-    print(response.statusCode);
+    
+    print(dataRes);
     if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading = false;
       notifyListeners();
-      successSnackBar(context!, "Verification Successful");
-      nextPageAndRemovePrevious(context, page: const LoginScreen());
-    } else if (response.statusCode == 400) {
-      isLoading = false;
-      notifyListeners();
+      successSnackBar(context!, "Email verification successful");
+      nextPage(context!, page: UploadUserPhotoView(email!, firstName!,
+        lastName!, password!, confirmPassword!));
 
-      errorSnackBar(context!, dataRes["message"]);
-    } else {
+    } else{
       isLoading = false;
       notifyListeners();
-      errorSnackBar(context!, "Something went wrong");
+      errorSnackBar(context!, dataRes["message"]);
+    }
+  }
+
+   Future verifyEmailForgotPassword({
+    BuildContext? context,
+    String? email,
+    String? otp,
+  }) async {
+    isLoading = true;
+    notifyListeners();
+    String url = "$baseUrl/auth/verifyEmail";
+    SharedPreferences sf = await SharedPreferences.getInstance();
+    String? tokens = sf.getString("token");
+
+    var response = await http.post(
+      Uri.parse(url),
+      body: {
+        "email": email,
+        "otp": otp,
+      },
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
+      },
+    );
+    isLoading = false;
+    notifyListeners();
+    print("Status Code ${response.statusCode}");
+    var dataRes = jsonDecode(response.body);
+    
+    print(dataRes);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      isLoading = false;
+      notifyListeners();
+      successSnackBar(context!, "Email verification successful");
+      nextPage(context!, page: ResetPassword());
+
+    } else{
+      isLoading = false;
+      notifyListeners();
+      errorSnackBar(context!, dataRes["message"]);
     }
   }
 

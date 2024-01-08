@@ -3,6 +3,7 @@ import 'package:medicon/services/auth_services/auth_provider.dart';
 import 'package:medicon/ui/components/buttons.dart';
 import 'package:medicon/ui/components/custom_scaffold.dart';
 import 'package:medicon/ui/components/custom_textfield.dart';
+import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
 import 'package:medicon/ui/pages/auth/verify_view.dart';
 import 'package:medicon/ui/utils/colors.dart';
@@ -75,12 +76,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 textColor: AppColors.white,
                 fontWeight: FontWeight.w600,
                 onTap: () {
-                  nextPage(context, page: VerifyView(email.text.trim()));
-                  /* authProvider.forgotPassword(
+                  if (email.text.isEmpty) {
+                  errorSnackBar(context, 'Email cannot be empty');
+                }  else {
+                  authProvider.forgotPassword(
+                    email: email.text,
                     context: context,
-                    email: email.text.trim(),
                     isResend: false,
-                  ); */
+                  );
+                }
                 },
               );
             },

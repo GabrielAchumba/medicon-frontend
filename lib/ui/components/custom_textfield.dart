@@ -114,7 +114,7 @@ class CustomTextField extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
               filled: true,
-              fillColor: AppColors.white,
+              fillColor: AppColors.lightGrey,
               errorStyle: GoogleFonts.rubik(
                 color: AppColors.red,
                 fontSize: 10.5.sp,
@@ -125,7 +125,7 @@ class CustomTextField extends StatelessWidget {
               suffix: suffix,
               border: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: AppColors.white,
+                  color: AppColors.lightGrey,
                   width: 1.h,
                 ),
                 borderRadius: BorderRadius.circular(8.h),
