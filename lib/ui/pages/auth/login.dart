@@ -32,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _passwordVisible = false;
   bool isForgotPasswordVisible = false;
   bool removeImage = true;
+  bool accept = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
             'Fill in your details or continue with your social handles',
             fontSize: 13.sp,
             textAlign: TextAlign.start,
-            color: AppColors.grey
+            color: AppColors.textBlack
           ),
           SizedBox(height: 20.h),
           CustomTextField(
@@ -65,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           SizedBox(height: 15.h),
           CustomTextField(
-            obscureText: _passwordVisible,
+            obscureText: !_passwordVisible,
             hintText: 'Password',
             controller: password,
             suffixIcon: IconButton(
@@ -88,9 +89,29 @@ class _LoginScreenState extends State<LoginScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Remember me',
-                style: TextStyle(color: AppColors.black, fontWeight: FontWeight.w800, fontSize: 15),
+              Row(
+                children: [
+                  InkWell(
+                onTap: () => setState(() => accept = !accept),
+                child: Container(
+                  height: 20.h,
+                  width: 20.h,
+                  decoration: BoxDecoration(
+                    color: accept ? AppColors.darkGreen : null,
+                    //borderRadius: BorderRadius.circular(10.h),
+                    border: Border.all(
+                      width: 3.h,
+                      color: const Color(0xffD0D5DD),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 8.h),
+                  const Text(
+                    'Remember me',
+                    style: TextStyle(color: AppColors.black, fontWeight: FontWeight.w300, fontSize: 13),
+                  ),
+                ],
               ),
               Expanded(
                 child: Text(''),
@@ -105,11 +126,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     alignment: Alignment.topRight,
                
                      child: Text(
-                      "Forgot Password",
+                      "Forgot Password?",
                       style: TextStyle(
-                        fontWeight: FontWeight.w600,
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w300,
                         color: AppColors.darkGreen,
-                        fontSize: 14,
+                        fontSize: 13,
                         fontStyle: FontStyle.italic,
                       ),
                     ),
@@ -143,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   buttonColor: AppColors.white,
                   fontSize: 15.sp,
                   height: 56.h,
-                  borderColor: AppColors.grey,
+                  borderColor: AppColors.textBlack,
                   icon: 'logo',
                   //busy: authProvider.isLoading,
                   textColor: AppColors.black,
@@ -160,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   buttonColor: AppColors.white,
                   fontSize: 15.sp,
                   height: 56.h,
-                  borderColor: AppColors.grey,
+                  borderColor: AppColors.textBlack,
                   icon: 'logo',
                   //busy: authProvider.isLoading,
                   textColor: AppColors.black,
@@ -178,7 +200,12 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const Text(
                 'Do not  have an account?',
-                style: TextStyle(color: AppColors.grey, fontWeight: FontWeight.w800, fontSize: 15),
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  color: AppColors.textBlack, 
+                  //fontWeight: FontWeight.w800, 
+                  fontSize: 15
+                ),
               ),
               const SizedBox(
                 width: 8,
@@ -190,7 +217,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Text(
                     'Create account',
                     style: TextStyle(
-                        color: AppColors.black, fontSize: 15, fontWeight: FontWeight.w800),
+                        color: AppColors.black, 
+                        fontSize: 15, 
+                        //fontWeight: FontWeight.w800
+                      ),
                   ))
             ],
           ),

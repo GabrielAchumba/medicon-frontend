@@ -5,11 +5,10 @@ import 'package:medicon/services/auth_services/auth_provider.dart';
 import 'package:medicon/ui/components/buttons.dart';
 import 'package:medicon/ui/components/custom_scaffold.dart';
 import 'package:medicon/ui/components/custom_textfield.dart';
-import 'package:medicon/ui/components/horizontal_dividers.dart';
 import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
-import 'package:medicon/ui/pages/auth/policy.dart';
-import 'package:medicon/ui/pages/auth/terms_and_conditions.dart';
+import 'package:medicon/ui/pages/auth/login.dart';
+import 'package:medicon/ui/pages/auth/terms_of_service.dart';
 import 'package:medicon/ui/utils/colors.dart';
 import 'package:medicon/ui/utils/router.dart';
 import 'package:medicon/utils/router.dart';
@@ -157,7 +156,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              push(context, const TermsAndConditions());
+                              push(context, const TermsOfService());
                             }),
                       TextSpan(
                         text: 'Terms ',
@@ -175,7 +174,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              push(context, const PrivacyPolicy());
+                              push(context, const TermsOfService());
                             }),
                     ],
                   ),
@@ -217,6 +216,35 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
             ); 
           }),
           SizedBox(height: 20.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Already have an account?',
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  color: AppColors.textBlack, 
+                  //fontWeight: FontWeight.w800, 
+                  fontSize: 15
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    nextPage(context, page: const LoginScreen());
+                  },
+                  child: const Text(
+                    'Sign in',
+                    style: TextStyle(
+                        color: AppColors.black, 
+                        fontSize: 15, 
+                        //fontWeight: FontWeight.w800
+                      ),
+                  ))
+            ],
+          ),
         ],
       ),
     );

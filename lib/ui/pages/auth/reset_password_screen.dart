@@ -32,8 +32,12 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   String selectedCountry = "";
   bool isLoading = false;
+  bool _passwordVisible = false;
+  bool _confirmPasswordVisible = false;
+  bool isForgotPasswordVisible = false;
 
   bool accept = false;
+  bool removeImage = true;
   @override
   void initState() {
     accept = widget.isLogin;
@@ -43,6 +47,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      removeImage: removeImage,
       title: '',
       child: Container(
         padding: EdgeInsets.all(20.h),
@@ -59,17 +64,29 @@ class _ResetPasswordState extends State<ResetPassword> {
               color: AppColors.black,
             ),
             SizedBox(height: 30.h),
-            /* regularText(
-              'Password',
+            regularText(
+              'Your new password must different from previous password.',
               fontSize: 13.sp,
               textAlign: TextAlign.start,
-              //fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w200,
               color: AppColors.textBlack,
-            ), */
-            //SizedBox(height: 10.h),
+            ),
+            SizedBox(height: 30.h),
             CustomTextField(
+              obscureText: !_passwordVisible,
               hintText: 'Password',
               controller: password,
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: const Color(0xff9BA59F),
+                ),
+                onPressed: () {
+                  setState(() {
+                    _passwordVisible = !_passwordVisible;
+                  });
+                },
+              ),
               // maxLength: 11,
               // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               textInputAction: TextInputAction.done,
@@ -84,8 +101,20 @@ class _ResetPasswordState extends State<ResetPassword> {
             ), */
             //SizedBox(height: 10.h),
             CustomTextField(
+              obscureText: !_confirmPasswordVisible,
               hintText: 'Confirm password',
               controller: confirmPassword,
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _confirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: const Color(0xff9BA59F),
+                ),
+                onPressed: () {
+                  setState(() {
+                    _confirmPasswordVisible = !_confirmPasswordVisible;
+                  });
+                },
+              ),
               // maxLength: 11,
               // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               textInputAction: TextInputAction.done,

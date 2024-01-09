@@ -99,7 +99,7 @@ class CustomTextField extends StatelessWidget {
             textInputAction: textInputAction,
             style: GoogleFonts.rubik(
               color: AppColors.black,
-              fontSize: 15.sp,
+              fontSize: 13.sp,
               letterSpacing: 0.4,
               //fontWeight: FontWeight.w600,
             ),
@@ -109,12 +109,12 @@ class CustomTextField extends StatelessWidget {
               contentPadding: EdgeInsets.all(15.h),
               hintText: hintText,
               hintStyle: GoogleFonts.rubik(
-                color: isCreate ? AppColors.black : AppColors.grey,
-                fontSize: 17.sp,
+                color: isCreate ? AppColors.black : AppColors.textBlack,
+                fontSize: 13.sp,
                 fontWeight: FontWeight.w400,
               ),
               filled: true,
-              fillColor: AppColors.lightGrey,
+              fillColor: AppColors.grey,
               errorStyle: GoogleFonts.rubik(
                 color: AppColors.red,
                 fontSize: 10.5.sp,
@@ -125,14 +125,14 @@ class CustomTextField extends StatelessWidget {
               suffix: suffix,
               border: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: AppColors.lightGrey,
+                  color: AppColors.grey,
                   width: 1.h,
                 ),
                 borderRadius: BorderRadius.circular(8.h),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: AppColors.white,
+                  color: AppColors.darkGreen,
                   width: 1.h,
                 ),
                 borderRadius: BorderRadius.circular(8.h),

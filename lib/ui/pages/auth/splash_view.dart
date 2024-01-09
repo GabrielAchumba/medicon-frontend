@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:medicon/ui/pages/auth/onboarding_view.dart';
+import 'package:medicon/ui/utils/colors.dart';
 //import 'package:namer2/ui/pages/home/main_layout.dart';
 import 'package:medicon/ui/utils/router.dart';
 import 'package:medicon/ui/utils/utils.dart';
@@ -21,24 +22,10 @@ class _SplashViewState extends State<SplashView> {
   String? mtoken = "";
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 2), () {
-      // pushReplacement(context, const OnboardingView());
-      // locator.get<NotificationService>().initializePN();
-      // if (AppCache.getIsFirst()) {
-      //   pushReplacement(context, const OnboardingView());
-      // } else {
-      //   String? uid = FirebaseAuth.instance.currentUser?.uid;
-      //   if (uid == null) {
-      //     log("auth view");
-      //     pushReplacement(context, const LoginScreen());
-      //   } else {
-      //     pushReplacement(context, const MainLayout());
-      //   }
-      // }
-    }
+    Future.delayed(const Duration(seconds: 3), () {
+      }
     );
-    //(mtoken.toString());
-    // getToken();
+
     hasAccount();
     super.initState();
   }
@@ -132,13 +119,29 @@ class _SplashViewState extends State<SplashView> {
       body: Container(
         alignment: Alignment.center,
         decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/splash.png'), fit: BoxFit.cover),
+          color: AppColors.white,
+         /*  image: DecorationImage(
+              image: AssetImage('assets/images/splash.png'), fit: BoxFit.cover), */
         ),
-        child: Image.asset(
-          'assets/images/logo.png',
-          height: 150.h,
-          width: 150.h,
+        child: Row(
+          crossAxisAlignment : CrossAxisAlignment.center,
+          children: [
+            Expanded(child: Text(''),),
+            Image.asset(
+              'assets/images/logo.png',
+              //height: 150.h,
+              //width: 150.h,
+            ),
+            const Text(
+              "Medicon",
+              style: TextStyle(
+                color: AppColors.black,
+                fontSize: 16,
+                //fontWeight: FontWeight.w600,
+              ),
+            ),
+            Expanded(child: Text(''),),
+          ],
         ),
       ),
     );

@@ -46,13 +46,20 @@ class _OnboardingViewState extends State<OnboardingView> {
                             onTap: () {
 
                             },
-                            child: const Text(
-                              "Medicon",
-                              style: TextStyle(
-                                color: AppColors.black,
-                                fontSize: 16,
-                                //fontWeight: FontWeight.w600,
-                              ),
+                            child: Row(
+                              //crossAxisAlignment : CrossAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                              'assets/images/logo.png'),
+                                const Text(
+                                  "Medicon",
+                                  style: TextStyle(
+                                    color: AppColors.black,
+                                    fontSize: 16,
+                                    //fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -67,10 +74,11 @@ class _OnboardingViewState extends State<OnboardingView> {
                             color: AppColors.black,
                           ),
                         ),
+                        SizedBox(height: 50),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10.h),
                           child: Image.asset(
-                              'assets/images/onboard$_index.gif',
+                              'assets/images/onboard$_index.png',
                               width: 310.h),
                         ),
                       ],

@@ -31,11 +31,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   String selectedCountry = "";
 
   bool accept = false;
+  bool removeImage = true;
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      removeBack: true,
+      removeImage: removeImage,
       title: '',
       child: ListView(
         padding: EdgeInsets.all(20.h),
@@ -52,6 +53,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           regularText(
             'Type your email address and we will send the verification code',
             fontSize: 13.sp,
+            fontWeight: FontWeight.w200,
             textAlign: TextAlign.start,
             height: 1.8,
             color: AppColors.textBlack,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
+import 'package:medicon/ui/utils/colors.dart';
 
 Widget buttonWithBorder(
   String text, {
@@ -26,13 +27,13 @@ Widget buttonWithBorder(
       alignment: Alignment.center,
       padding: EdgeInsets.symmetric(horizontal: horiMargin ?? 0),
       decoration: BoxDecoration(
-          color: isActive ? buttonColor :const Color(0xffF6F6F6),
+          color: isActive ? buttonColor :AppColors.textBlack,
           borderRadius: BorderRadius.circular(borderRadius ?? 8.h),
           border: Border.all(
               width: .7.h,
               color: isActive
                   ? (borderColor ?? Colors.transparent)
-                  : const Color(0xffF6F6F6))),
+                  : AppColors.textBlack)),
       child: Center(
           child: busy
               ? SizedBox(

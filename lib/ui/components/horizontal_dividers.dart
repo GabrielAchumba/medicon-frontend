@@ -13,8 +13,8 @@ class HorizontalDivider extends StatelessWidget {
 
    const HorizontalDivider({super.key, 
     this.text = "",
-    this.textColor = AppColors.grey,
-    this.color = AppColors.grey,
+    this.textColor = AppColors.textBlack,
+    this.color = AppColors.textBlack,
     this.indent = 10.0,
     this.leftEndIndent = 10.0,
     this.rightEndIndent = 10.0,

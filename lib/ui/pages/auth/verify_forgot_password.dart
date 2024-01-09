@@ -56,10 +56,12 @@ class _VerifyForgotPasswordViewState extends State<VerifyForgotPasswordView> {
     super.dispose();
   }
 
+  bool removeImage = true;
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthServices>(builder: (context, provider, _) {
       return CustomScaffold(
+        removeImage: removeImage,
         title: '',
         child: ListView(
           padding: EdgeInsets.all(20.h),
@@ -72,13 +74,13 @@ class _VerifyForgotPasswordViewState extends State<VerifyForgotPasswordView> {
               fontWeight: FontWeight.w600,
               color: AppColors.black,
             ),
-            SizedBox(height: 10.h),
+            SizedBox(height: 20.h),
             regularText(
               'Enter code that we have sent to your \n${widget.email}.',
               fontSize: 13.sp,
               textAlign: TextAlign.start,
               height: 1.8,
-              //fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w200,
               color: AppColors.textBlack,
             ),
             SizedBox(height: 61.h),

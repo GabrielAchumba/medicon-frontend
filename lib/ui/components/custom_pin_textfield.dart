@@ -49,7 +49,7 @@ class CustomPinTextField extends StatelessWidget {
                   TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
-                color: AppColors.white,
+                color: AppColors.grey,
                 border: Border.all(
                     color: AppColors.green.withOpacity(.2), width: 1.h),
               )),
@@ -62,8 +62,8 @@ class CustomPinTextField extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
-                  color: AppColors.white,
-                  border: Border.all(color: AppColors.green, width: 1.h))),
+                  color: AppColors.grey,
+                  border: Border.all(color: AppColors.darkGreen, width: 1.h))),
           submittedPinTheme: PinTheme(
               height: 60.0,
               width: 60.0,
@@ -73,7 +73,7 @@ class CustomPinTextField extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
-                  color: AppColors.white,
+                  color: AppColors.grey,
                   border: Border.all(color: AppColors.darkBlue, width: .5.h))),
         )
       ],
