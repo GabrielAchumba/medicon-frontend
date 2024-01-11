@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http_parser/http_parser.dart';
@@ -19,11 +20,13 @@ import 'package:medicon/services/common/shared_preferences_service.dart';
 import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/ui/pages/auth/login.dart';
 import 'package:medicon/ui/pages/auth/reset_password_screen.dart';
+import 'package:medicon/ui/pages/auth/success.dart';
 import 'package:medicon/ui/pages/auth/upload_user_photo.dart';
 import 'package:medicon/ui/pages/auth/verify_email_view.dart';
 import 'package:medicon/ui/pages/auth/verify_forgot_password.dart';
 //import 'package:medicon/ui/pages/auth/signup3_view.dart';
 import 'package:medicon/ui/pages/auth/verify_view.dart';
+import 'package:medicon/ui/pages/auth/welcome.dart';
 //import 'package:medicon/ui/pages/home/main_layout.dart';
 import 'package:medicon/utils/router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,19 +35,16 @@ class AuthServices with ChangeNotifier {
   bool isLoading = false;
   String status = "";
   String message = "";
-  String baseUrl = "http://localhost:8000";
+  //String baseUrl = "http://localhost:8000";
+  String baseUrl = "https://medicon-backend.vercel.app";
   late final Dio _dio;
 
   AuthServices() : _dio = Dio();
-  BuildContext? _context;
+  //BuildContext? _context;
 
   Future sendOTPToEmail({
     BuildContext? context,
-    String? firstName,
-    String? lastName,
     String? email,
-    String? password,
-    String? confirmPassword,
     bool isResend = false,
   }) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
@@ -71,32 +71,24 @@ class AuthServices with ChangeNotifier {
       if (isResend == true) {
         successSnackBar(context!, dataRes["message"]);
       } else {
-        nextPage(context!, page: VerifyEmailView(email!, firstName!,
-        lastName!, password!, confirmPassword!));
+        nextPage(context!, page: VerifyEmailView(email!));
       }
       successSnackBar(context, dataRes["message"]);
-    }else{
-      print("ERROR");
+    }else {
       isLoading = false;
       notifyListeners();
-      errorSnackBar(context!, dataRes["message"]);
+      String message = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+      errorSnackBar(context!, message);
     }
   }
 
-  
   Future UploadFile({
     BuildContext? context,
-    String? firstName,
-    String? lastName,
-    String? email,
-    String? password,
-    String? confirmPassword,
     List<int>? imageBytes,
     String imageName = "",
   }) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
     String url = "$baseUrl/gcp/upload";
-    _context = context;
 
     String extension = imageName.split(".").last;
 
@@ -125,9 +117,7 @@ class AuthServices with ChangeNotifier {
       String url = response.data["url"];
       String fileName = response.data["fileName"];
       String originalFileName = response.data["originalFileName"];
-      await signUp(firstName!,
-      lastName!, email!, password!,
-      confirmPassword!, url, fileName, originalFileName);
+      //await updateUser(url, fileName, originalFileName);
     }else{
       isLoading = false;
       notifyListeners();
@@ -135,53 +125,15 @@ class AuthServices with ChangeNotifier {
     }
   }
 
-  Future UploadFile2({
+  Future signUp(
+    {
     BuildContext? context,
     String? firstName,
     String? lastName,
     String? email,
     String? password,
     String? confirmPassword,
-    File? image,
   }) async {
-    SharedPreferences sf = await SharedPreferences.getInstance();
-    String url = "$baseUrl/gcp/upload";
-
-    isLoading = true;
-    notifyListeners();
-    var response = await http.post(
-      Uri.parse(url),
-      body: {
-        "file": image.toString(),
-      },
-    );
-    print(response.body);
-    print("=================================================");
-    var dataRes = jsonDecode(response.body);
-    print(dataRes);
-    /* if (response.statusCode == 200) {
-      isLoading = false;
-        notifyListeners();
-        SharedPreferencesService(sf).setToken(dataRes["token"]);
-        nextPageOnly(context!, page: LoginScreen());
-        successSnackBar(context, dataRes["message"]);
-    } else {
-      isLoading = false;
-      notifyListeners();
-      errorSnackBar(context!, dataRes["message"]);
-    } */
-  }
-
-//  //BuildContext? context,
-  Future signUp(
-    String? firstName,
-    String? lastName,
-    String? email,
-    String? password,
-    String? confirmPassword,
-    String? url,
-    String? fileName,
-    String? originalFileName) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
      String? tokens = sf.getString("token");
     String url = "$baseUrl/auth/register";
@@ -197,30 +149,31 @@ class AuthServices with ChangeNotifier {
         "email": email,
         "password": password,
         "confirmPassword": confirmPassword,
-        "url": url,
-        "fileName": fileName,
-        "originalFileName": originalFileName,
         "department": "Nurse",
       },
       headers: {
         'Accept': 'application/json',
-        'Authorization': 'Bearer $tokens',
       },
     );
     print(response.body);
     print("=================================================");
     var dataRes = jsonDecode(response.body);
     print(dataRes);
+    print("SEEN 1");
     if (response.statusCode == 200 || response.statusCode == 201) {
+      print("SEEN 2");
       isLoading = false;
         notifyListeners();;
         SharedPreferencesService(sf).setToken("");
-        nextPageOnly(_context!, page: LoginScreen());
-        successSnackBar(_context!, dataRes["message"]);
+        print("SEEN 3");
+        nextPage(context!, page: SuccessScreen(email!));
+        print("SEEN 4");
+        successSnackBar(context!, dataRes["message"]);
     } else {
       isLoading = false;
       notifyListeners();
-      errorSnackBar(_context!, dataRes["message"]);
+      String message = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+      errorSnackBar(context!, message);
     }
   }
 
@@ -234,35 +187,46 @@ class AuthServices with ChangeNotifier {
     String url = "$baseUrl/auth/login";
     SharedPreferences sf = await SharedPreferences.getInstance();
 
-    var response = await http.post(
-      Uri.parse(url),
-      body: {
-        "email": email,
-        "password": password,
-      },
-      headers: {
-        'Accept': 'application/json',
-      },
-    );
+    try {
+        var response = await http.post(
+        Uri.parse(url),
+        body: {
+          "email": email,
+          "password": password,
+        },
+        headers: {
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': 'true',
+          'Access-Control-Allow-Headers': 'Content-Type',
+          'Access-Control-Allow-Methods':
+          'GET,PUT,POST,DELETE'
+        },
+      );
 
-    var dataRes = jsonDecode(response.body);
+      var dataRes = jsonDecode(response.body);
 
-    if (dataRes["success"] == false) {
-      isLoading = false;
-      notifyListeners();
-      errorSnackBar(context!, "Username or password incorrect");
-    } else if (dataRes["success"] == true) {
-      isLoading = false;
-      notifyListeners();
-      SharedPreferencesService(sf).setToken(dataRes["token"]);
-      print(dataRes["token"]);
-      nextPageOnly(context!, page: const Placeholder());
-      //nextPageOnly(context!, page: const MainLayout());
-      successSnackBar(context, "Login Success");
-    } else {
-      isLoading = false;
-      notifyListeners();
-      errorSnackBar(context!, "Something went wrong");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        isLoading = false;
+        notifyListeners();
+        print(dataRes["token"]);
+        print(dataRes["fullName"]);
+        print(dataRes["email"]);
+        SharedPreferencesService(sf).setToken(dataRes["token"]);
+        SharedPreferencesService(sf).setUserDetails(dataRes["fullName"], dataRes["email"]);
+        String fullName = dataRes["fullName"];
+        nextPageOnly(context!, page:  WelcomeScreen(fullName));
+        successSnackBar(context, "Login Success");
+      } else {
+        isLoading = false;
+        notifyListeners();
+        String message = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+        errorSnackBar(context!, message);
+      }
+    } on Exception catch (exception) {
+      log("Error 1 ${exception.toString()}");
+    } catch (error) {
+      log("Error 1 ${error.toString()}");
     }
   }
 
@@ -301,7 +265,8 @@ class AuthServices with ChangeNotifier {
     } else {
       isLoading = false;
       notifyListeners();
-      errorSnackBar(context!, dataRes["message"]);
+      String message = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+      errorSnackBar(context!, message);
     }
   }
 
@@ -340,18 +305,14 @@ class AuthServices with ChangeNotifier {
     } else {
       isLoading = false;
       notifyListeners();
-
-      errorSnackBar(context!, dataRes["message"]);
-    } 
+      String message = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+      errorSnackBar(context!, message);
+    }
   }
 
   Future verifyEmail({
     BuildContext? context,
-    String? firstName,
-    String? lastName,
     String? email,
-    String? password,
-    String? confirmPassword,
     String? otp,
   }) async {
     isLoading = true;
@@ -381,13 +342,13 @@ class AuthServices with ChangeNotifier {
       isLoading = false;
       notifyListeners();
       successSnackBar(context!, "Email verification successful");
-      nextPage(context!, page: UploadUserPhotoView(email!, firstName!,
-        lastName!, password!, confirmPassword!));
+      nextPage(context, page: LoginScreen());
 
-    } else{
+    } else {
       isLoading = false;
       notifyListeners();
-      errorSnackBar(context!, dataRes["message"]);
+      String message = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+      errorSnackBar(context!, message);
     }
   }
 
@@ -401,6 +362,7 @@ class AuthServices with ChangeNotifier {
     String url = "$baseUrl/auth/verifyEmail";
     SharedPreferences sf = await SharedPreferences.getInstance();
     String? tokens = sf.getString("token");
+    print("tokens: $tokens");
 
     var response = await http.post(
       Uri.parse(url),
@@ -423,54 +385,13 @@ class AuthServices with ChangeNotifier {
       isLoading = false;
       notifyListeners();
       successSnackBar(context!, "Email verification successful");
-      nextPage(context!, page: ResetPassword());
+      nextPage(context, page: ResetPassword());
 
-    } else{
-      isLoading = false;
-      notifyListeners();
-      errorSnackBar(context!, dataRes["message"]);
-    }
-  }
-
-  Future setNewPassword({
-    String? email,
-    String? otp,
-    BuildContext? context,
-  }) async {
-    isLoading = true;
-    notifyListeners();
-    String url = "https://staging-cafia-8ac864534ee4.herokuapp.com/api/auth/resetPassword";
-    SharedPreferences sf = await SharedPreferences.getInstance();
-
-    var response = await http.post(
-      Uri.parse(url),
-      body: {
-        "email": email,
-        "otp": otp,
-      },
-      headers: {
-        'Accept': 'application/json',
-      },
-    );
-    isLoading = false;
-    notifyListeners();
-    print(response.body);
-    var dataRes = jsonDecode(response.body);
-    print(response.statusCode);
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      isLoading = false;
-      notifyListeners();
-      successSnackBar(context!, "Verification Successful");
-      nextPageAndRemovePrevious(context, page: const LoginScreen());
-    } else if (response.statusCode == 400) {
-      isLoading = false;
-      notifyListeners();
-
-      errorSnackBar(context!, dataRes["message"]);
     } else {
       isLoading = false;
       notifyListeners();
-      errorSnackBar(context!, "Something went wrong");
+      String message = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+      errorSnackBar(context!, message);
     }
   }
 }

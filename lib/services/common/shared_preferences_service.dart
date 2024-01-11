@@ -10,6 +10,8 @@ class SharedPreferencesService {
   final SharedPreferences sharedPreferences;
 
   static const tokenKey = 'token';
+  static const emailKey = 'email';
+  static const fullNameKey = 'fullName';
   static const id = 'id';
 
   Future<void> setToken(String token) async {
@@ -18,7 +20,20 @@ class SharedPreferencesService {
     log(getToken());
   }
 
+  Future<void> setUserDetails(String fullName, String email) async {
+    await sharedPreferences.setString(emailKey, email);
+    log(email);
+    log(getEmail());
+    await sharedPreferences.setString(fullNameKey, fullName);
+    log(fullName);
+    log(getFullName());
+  }
+
   String getToken() => sharedPreferences.getString(tokenKey) ?? "";
+
+  String getEmail() => sharedPreferences.getString(emailKey) ?? "";
+
+  String getFullName() => sharedPreferences.getString(fullNameKey) ?? "";
 
   Future<void> setId(String tokon) async {
     await sharedPreferences.setString(id, tokon);

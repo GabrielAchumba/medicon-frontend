@@ -21,19 +21,11 @@ import '../../../locator.dart';
 //import '../../../services/unique/notifications_service.dart';
 
 class VerifyEmailView extends StatefulWidget {
- 
-  final String firstName;
-  final String lastName;
+
   final String email;
-  final String password;
-  final String confirmPassword;
 
 
   const VerifyEmailView(this.email,
-  this.firstName,
-  this.lastName,
-  this.password,
-  this.confirmPassword, 
   {super.key});
   @override
   _VerifyEmailViewState createState() => _VerifyEmailViewState();
@@ -65,11 +57,13 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
     super.dispose();
   }
 
+  bool removeImage = true;
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthServices>(builder: (context, provider, _) {
       return CustomScaffold(
         title: '',
+        removeImage: removeImage,
         child: ListView(
           padding: EdgeInsets.all(20.h),
           children: [
@@ -108,11 +102,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                 busy: provider.isLoading, onTap: () {
               provider.verifyEmail(
                   context: context,
-                  firstName: widget.firstName,
-                  lastName: widget.lastName,
                   email: widget.email,
-                  password: widget.password,
-                  confirmPassword: widget.confirmPassword,
                   otp: code.text,
                 );
             }),
@@ -154,11 +144,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
 
                               provider.verifyEmail(
                                 context: context,
-                                firstName: widget.firstName,
-                                lastName: widget.lastName,
                                 email: widget.email,
-                                password: widget.password,
-                                confirmPassword: widget.confirmPassword,
                                 otp: code.text,
                               );
                             }

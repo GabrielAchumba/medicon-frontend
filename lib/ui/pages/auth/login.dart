@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:medicon/services/auth_services/auth_provider.dart';
 import 'package:medicon/ui/components/buttons.dart';
 import 'package:medicon/ui/components/custom_scaffold.dart';
 import 'package:medicon/ui/components/custom_textfield.dart';
 import 'package:medicon/ui/components/horizontal_dividers.dart';
+import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
 import 'package:medicon/ui/pages/auth/create_new_account.dart';
 import 'package:medicon/ui/pages/auth/forgot_password.dart';
 import 'package:medicon/ui/utils/colors.dart';
 import 'package:medicon/ui/utils/router.dart';
 import 'package:medicon/utils/router.dart';
+import 'package:provider/provider.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -25,8 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController phone = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController username = TextEditingController();
-  TextEditingController confirmPassword = TextEditingController();
 
   String selectedCountry = "";
   bool _passwordVisible = false;
@@ -141,18 +142,29 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
           SizedBox(height: 35.h),
-          buttonWithBorder(
-            'Sign in',
-            buttonColor: AppColors.darkGreen,
-            fontSize: 15.sp,
-            height: 56.h,
-            //busy: authProvider.isLoading,
-            textColor: AppColors.white,
-            fontWeight: FontWeight.w300,
-            onTap: () {
-              pushReplacement(context, const Placeholder());
-            },
-          ),
+          Consumer<AuthServices>(builder: (ctx, authProvider, child) {
+            return buttonWithBorder(
+              'Sign in',
+              buttonColor: AppColors.darkGreen,
+              fontSize: 15.sp,
+              height: 56.h,
+              textColor: AppColors.white,
+              fontWeight: FontWeight.w300,
+              busy: authProvider.isLoading,
+              onTap: () {
+                if (email.text.isEmpty ||
+                    password.text.isEmpty) {
+                  errorSnackBar(context, 'All fields cannot be empty');
+                } else {
+                  authProvider.login(
+                    context: ctx,
+                    email: email.text,
+                    password: password.text,
+                  );
+                }
+              },
+            ); 
+          }),
           SizedBox(height: 20.h),
           HorizontalDivider(text: "Or sign in with",),
           SizedBox(height: 30.h),

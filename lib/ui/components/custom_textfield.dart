@@ -169,6 +169,7 @@ class CustomTextField extends StatelessWidget {
             obscureText: obscureText,
             onTap: onTap,
             obscuringCharacter: '●',
+            //obscuringCharacter: '.',
             controller: controller,
             textAlign: textAlign ?? TextAlign.start,
             keyboardType: textInputType,

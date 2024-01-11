@@ -118,11 +118,6 @@ class _UploadUserPhotoViewState extends State<UploadUserPhotoView> {
                     onTap: () {
                       authProvider.UploadFile(
                         context: ctx,
-                        firstName: widget.firstName,
-                        lastName: widget.lastName,
-                        email: widget.email,
-                        password: widget.password,
-                        confirmPassword: widget.confirmPassword,
                         imageBytes: imageBytes!,
                         imageName: imageName!,
                       );

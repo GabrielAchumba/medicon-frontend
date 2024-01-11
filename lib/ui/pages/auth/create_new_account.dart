@@ -189,7 +189,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
               buttonColor: AppColors.darkGreen,
               fontSize: 15.sp,
               height: 56.h,
-              //busy: authProvider.isLoading,
+              busy: authProvider.isLoading,
               textColor: AppColors.white,
               fontWeight: FontWeight.w300,
               onTap: () {
@@ -202,14 +202,13 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                 } else if (accept == false) {
                   errorSnackBar(context, 'Agree to the terms and conditions');
                 } else {
-                  authProvider.sendOTPToEmail(
+                  authProvider.signUp(
                     context: ctx,
                     firstName: firstName.text,
                     lastName: lastName.text,
                     email: email.text,
                     password: password.text,
                     confirmPassword: confirmPassword.text,
-                    isResend: false,
                   );
                 }
               },

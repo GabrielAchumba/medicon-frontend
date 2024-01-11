@@ -15,7 +15,8 @@ void errorSnackBar(BuildContext context, String title) {
         ),
         const Spacer(),
         InkWell(
-          onTap: () => Navigator.pop(context),
+          //onTap: () => Navigator.pop(context),
+          onTap: () => {},
           child: Icon(
             Icons.close,
             size: 20.h,
@@ -56,7 +57,8 @@ void successSnackBar(BuildContext context, String title) {
         ),
         const Spacer(),
         InkWell(
-          onTap: () => Navigator.pop(context),
+          //onTap: () => Navigator.pop(context),
+          onTap: () => {},
           child: Icon(
             Icons.close,
             size: 20.h,

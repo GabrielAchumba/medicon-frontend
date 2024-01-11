@@ -18,14 +18,17 @@ import 'package:provider/provider.dart';
 import '../../../utils/router.dart';
 import 'login.dart';
 
-class PasswordUpdated extends StatefulWidget {
+class SuccessScreen extends StatefulWidget {
 
-  const PasswordUpdated({super.key});
+  final String email;
+
+  const SuccessScreen(this.email, 
+  {super.key});
   @override
-  _PasswordUpdatedState createState() => _PasswordUpdatedState();
+  _SuccessScreenState createState() => _SuccessScreenState();
 }
 
-class _PasswordUpdatedState extends State<PasswordUpdated> {
+class _SuccessScreenState extends State<SuccessScreen> {
 
 
   bool isLoading = false;
@@ -47,7 +50,7 @@ class _PasswordUpdatedState extends State<PasswordUpdated> {
       child: Container(
         padding: EdgeInsets.all(20.h),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 50.h),
             ClipRRect(
@@ -58,30 +61,39 @@ class _PasswordUpdatedState extends State<PasswordUpdated> {
             ),
             SizedBox(height: 30.h),
             regularText(
-              'Password Updated!',
+              'Success',
               fontSize: 20.sp,
-              textAlign: TextAlign.start,
+              textAlign: TextAlign.center,
               fontWeight: FontWeight.w600,
               color: AppColors.black,
             ),
             SizedBox(height: 30.h),
             regularText(
-              'Your password has been set up successfully.',
+              'Your account has been successfully created, proceed to verification.',
               fontSize: 13.sp,
-              textAlign: TextAlign.start,
+              textAlign: TextAlign.center,
               fontWeight: FontWeight.w200,
               color: AppColors.textBlack,
             ),
             SizedBox(height: 60.h),
-            buttonWithBorder('Proceed to Sign in',
-              buttonColor: AppColors.darkGreen,
-              fontSize: 15.sp,
-              height: 56.h,
-              textColor: AppColors.white,
-              fontWeight: FontWeight.w600, onTap: () {
-
-              },
-            ),
+            Consumer<AuthServices>(builder: (ctx, authProvider, child) {
+              return buttonWithBorder(
+                'Proceed to verification',
+                buttonColor: AppColors.darkGreen,
+                fontSize: 15.sp,
+                height: 56.h,
+                //busy: authProvider.isLoading,
+                textColor: AppColors.white,
+                fontWeight: FontWeight.w300,
+                onTap: () {
+                  authProvider.sendOTPToEmail(
+                      context: ctx,
+                      email: widget.email,
+                      isResend: false,
+                    );
+                },
+              ); 
+            }),
             SizedBox(height: 20.h),
 
           ],
