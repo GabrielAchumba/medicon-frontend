@@ -3,16 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
-
-/* import 'package:cafia/services/common/shared_preferences_service.dart';
-import 'package:cafia/ui/components/snackbar.dart';
-import 'package:cafia/ui/pages/auth/login.dart';
-import 'package:cafia/ui/pages/auth/signup3_view.dart';
-import 'package:cafia/ui/pages/auth/verify_view.dart';
-import 'package:cafia/ui/pages/home/dashboard_view.dart';
-import 'package:cafia/ui/pages/home/main_layout.dart';
-import 'package:cafia/utils/coming_soon.dart';
-import 'package:cafia/utils/router.dart'; */
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -24,10 +14,8 @@ import 'package:medicon/ui/pages/auth/success.dart';
 import 'package:medicon/ui/pages/auth/upload_user_photo.dart';
 import 'package:medicon/ui/pages/auth/verify_email_view.dart';
 import 'package:medicon/ui/pages/auth/verify_forgot_password.dart';
-//import 'package:medicon/ui/pages/auth/signup3_view.dart';
 import 'package:medicon/ui/pages/auth/verify_view.dart';
-import 'package:medicon/ui/pages/auth/welcome.dart';
-//import 'package:medicon/ui/pages/home/main_layout.dart';
+import 'package:medicon/ui/pages/onboarding/welcome.dart';
 import 'package:medicon/utils/router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -196,11 +184,6 @@ class AuthServices with ChangeNotifier {
         },
         headers: {
           'Accept': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': 'true',
-          'Access-Control-Allow-Headers': 'Content-Type',
-          'Access-Control-Allow-Methods':
-          'GET,PUT,POST,DELETE'
         },
       );
 

@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:medicon/ui/pages/auth/onboarding_view.dart';
+import 'package:medicon/ui/pages/onboarding/welcome.dart';
 import 'package:medicon/ui/utils/colors.dart';
 //import 'package:namer2/ui/pages/home/main_layout.dart';
 import 'package:medicon/ui/utils/router.dart';
+import 'package:medicon/utils/router.dart';
 import 'package:medicon/ui/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,16 +35,17 @@ class _SplashViewState extends State<SplashView> {
   void hasAccount() async{
     SharedPreferences sf = await SharedPreferences.getInstance();
     String? token = sf.getString("token");
+    String? fullName = sf.getString("fullName");
     print(token);
     
-    pushReplacement(context, const OnboardingView());
-    /* if(token == null || token == ""){
-      pushReplacement(context, const OnboardingView());
+    //nextPage(context, page: const OnboardingView());
+    if(token == null || token == ""){
+      nextPage(context, page: const OnboardingView());
     }
     else{
       //pushReplacement(context, const MainLayout());
-      pushReplacement(context, const Placeholder());
-    } */
+      nextPageOnly(context, page:  WelcomeScreen(fullName!));
+    }
   }
 
   void requestPermission() async {

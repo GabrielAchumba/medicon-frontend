@@ -183,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   textColor: AppColors.black,
                   fontWeight: FontWeight.w300,
                   onTap: () {
-                    pushReplacement(context, const Placeholder());
+                    nextPage(context, page: const Placeholder());
                   },
                 ),
               ),
@@ -200,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   textColor: AppColors.black,
                   fontWeight: FontWeight.w300,
                   onTap: () {
-                    pushReplacement(context, const Placeholder());
+                    nextPage(context,  page: const Placeholder());
                   },
                 ),
               ),

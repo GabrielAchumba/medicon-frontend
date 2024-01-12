@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 ///Navigator to the next page
+
 Future nextPage(BuildContext context, {Widget? page}) {
   return Navigator.push(
       context, CupertinoPageRoute(builder: (context) => page!));
