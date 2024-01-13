@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
-import 'package:medicon/ui/pages/auth/onboarding_view.dart';
+import 'package:medicon/ui/pages/auth/landing_screen.dart';
 import 'package:medicon/ui/pages/onboarding/welcome.dart';
 import 'package:medicon/ui/utils/colors.dart';
 //import 'package:namer2/ui/pages/home/main_layout.dart';
@@ -40,7 +40,7 @@ class _SplashViewState extends State<SplashView> {
     
     //nextPage(context, page: const OnboardingView());
     if(token == null || token == ""){
-      nextPage(context, page: const OnboardingView());
+      nextPage(context, page: const LandingScreen());
     }
     else{
       //pushReplacement(context, const MainLayout());
@@ -132,8 +132,8 @@ class _SplashViewState extends State<SplashView> {
             Expanded(child: Text(''),),
             Image.asset(
               'assets/images/logo.png',
-              //height: 150.h,
-              //width: 150.h,
+              height: 150.h,
+              width: 150.h,
             ),
             const Text(
               "Medicon",

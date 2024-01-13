@@ -8,14 +8,14 @@ import 'package:medicon/ui/utils/colors.dart';
 import 'package:medicon/ui/utils/router.dart';
 import 'package:medicon/utils/router.dart';
 
-class OnboardingView extends StatefulWidget {
-  const OnboardingView({super.key});
+class LandingScreen extends StatefulWidget {
+  const LandingScreen({super.key});
 
   @override
-  _OnboardingViewState createState() => _OnboardingViewState();
+  _LandingScreenState createState() => _LandingScreenState();
 }
 
-class _OnboardingViewState extends State<OnboardingView> {
+class _LandingScreenState extends State<LandingScreen> {
   int _index = 0;
 
   PageController controller = PageController();
