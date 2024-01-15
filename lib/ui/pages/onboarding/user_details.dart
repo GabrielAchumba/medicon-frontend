@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:medicon/models/external_file.dart';
+import 'package:medicon/services/common/file_storage_service.dart';
 import 'package:medicon/ui/components/buttons.dart';
 import 'package:medicon/ui/components/custom_scaffold.dart';
 import 'package:medicon/ui/components/custom_textfield.dart';
 import 'package:medicon/ui/components/horizontal_dividers.dart';
+import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
 import 'package:medicon/ui/components/user_detail_card.dart';
 import 'package:medicon/ui/pages/auth/create_new_account.dart';
@@ -13,6 +15,7 @@ import 'package:medicon/ui/pages/onboarding/select_country.dart';
 import 'package:medicon/ui/utils/colors.dart';
 import 'package:medicon/ui/utils/router.dart';
 import 'package:medicon/utils/router.dart';
+import 'package:provider/provider.dart';
 
 
 class UserDetailsScreen extends StatefulWidget {
@@ -77,8 +80,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       isPendingVerification: false
     ),
   ];
-  List<String> fileGroupIds =  [];
-
+  List<FilePayloadBackend> medicalQualificationFiles = [];
+  String yearOfMedicalQualification = "";
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -103,48 +106,49 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             color: AppColors.textBlack
           ),
           SizedBox(height: 40.h),
-          Container(
-            height: 20.h,
-            margin: EdgeInsets.only(bottom: 10.h),
-            child: Row(
-              children: [
-                ListView.builder(
-                  itemCount: notVerifiedProfiles.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index){
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AnimatedContainer(
-                          width: 60.h,
-                          height: 6.h,
-                          duration: const Duration(seconds: 1),
-                          decoration: BoxDecoration(
-                            color: index  < _index ? 
-                            AppColors.darkGreen :
-                            AppColors.textBlack,
+          if(pendingVerificationProfiles.length > 0)
+            Container(
+              height: 20.h,
+              margin: EdgeInsets.only(bottom: 10.h),
+              child: Row(
+                children: [
+                  ListView.builder(
+                    itemCount: notVerifiedProfiles.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index){
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AnimatedContainer(
+                            width: 60.h,
+                            height: 6.h,
+                            duration: const Duration(seconds: 1),
+                            decoration: BoxDecoration(
+                              color: index  < _index ? 
+                              AppColors.darkGreen :
+                              AppColors.textBlack,
+                            ),
+                            padding: EdgeInsets.all(4.h),
                           ),
-                          padding: EdgeInsets.all(4.h),
-                        ),
-                      ],
-                    );
-                  }
-                ),
-                SizedBox(width: 10.h),
-                regularText(
-                  pendingVerificationProfiles.length == 0 ? '':
-                   pendingVerificationProfiles.length > notVerifiedProfiles.length ? 
-                  '${notVerifiedProfiles.length}/${notVerifiedProfiles.length}':
-                  '${pendingVerificationProfiles.length}/${notVerifiedProfiles.length}',
-                  fontSize: 13.sp,
-                  textAlign: TextAlign.start,
-                  color: AppColors.textBlack
-                ),
-              ],
+                        ],
+                      );
+                    }
+                  ),
+                  SizedBox(width: 10.h),
+                  regularText(
+                    pendingVerificationProfiles.length == 0 ? '':
+                    pendingVerificationProfiles.length > notVerifiedProfiles.length ? 
+                    '${notVerifiedProfiles.length}/${notVerifiedProfiles.length}':
+                    '${pendingVerificationProfiles.length}/${notVerifiedProfiles.length}',
+                    fontSize: 13.sp,
+                    textAlign: TextAlign.start,
+                    color: AppColors.textBlack
+                  ),
+                ],
+              ),
             ),
-          ),
           SizedBox(height: 20.h),
           ListView.builder(
                 itemCount: notVerifiedProfiles.length,
@@ -161,17 +165,14 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                         cardColor: AppColors.grey,
                         cardBorderColor: AppColors.textBlack,
                         onTap: () async {
-                          pendingVerificationProfiles.add(notVerifiedProfiles[index]);
-                          _index = pendingVerificationProfiles.length;
                           for(var i = 0; i < notVerifiedProfiles.length; i++){
                             notVerifiedProfiles[i].isActive = false;
                           }
                           notVerifiedProfiles[index].isActive = true;
-                          notVerifiedProfiles[index].isPendingVerification = true;
 
                           switch(notVerifiedProfiles[index].title){
                             case 'Proof of medical qualification':
-                              GrouppedExternalFiles? res = await Navigator.push(
+                              FilePayload? filePayload = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ProofOfMedicalQualificationScreen(
@@ -179,9 +180,29 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                   ),
                                 ),
                               );
-                              if (res != null) {
-                                if(fileGroupIds.contains(res.groupId)){
-                                  fileGroupIds.add(res.groupId);
+
+                              print("SEEN 10");
+                              if (filePayload != null) {
+                                  medicalQualificationFiles = filePayload.filePayloads;
+                                  yearOfMedicalQualification = filePayload.others as String;
+                                  print("Medical Qualification Files: ${medicalQualificationFiles}");
+                                  print("Year of Medical Qualification: $yearOfMedicalQualification");
+                                  if(medicalQualificationFiles.length > 0){
+                                    print("Medical Qualification Files[0].originalFileName: ${medicalQualificationFiles[0].originalFileName}");
+                                    print("Medical Qualification Files[0].fileName: ${medicalQualificationFiles[0].fileName}");
+                                    print("Medical Qualification Files[0].url: ${medicalQualificationFiles[0].url}");
+                                    pendingVerificationProfiles.add(notVerifiedProfiles[index]);
+                                  _index = pendingVerificationProfiles.length;
+                                    notVerifiedProfiles[index].isPendingVerification = true;
+                                    print("SEEN 11");
+                                  }
+                                  print("filePayload.errorMessage: ${filePayload.errorMessage}");
+                                if(filePayload.errorMessage != "No Error"){
+                                  errorSnackBar(context, 
+                                  filePayload.errorMessage!, 
+                                  duration: 10);
+                                }else{
+                                  successSnackBar(context, "Files stored successfully");
                                 }
                               }
                               setState(() {});
@@ -195,18 +216,41 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                   );
                 },
           ),
+           SizedBox(height: 20.h),
+          Consumer<FileStorageServices>(builder: (ctx, fileStorageProvider, child) {
+            return buttonWithBorder(
+              'Submit for verification',
+              buttonColor: AppColors.darkGreen,
+              fontSize: 15.sp,
+              height: 56.h,
+              textColor: AppColors.white,
+              fontWeight: FontWeight.w300,
+              busy: fileStorageProvider.isLoading,
+              onTap: ()async  {
+                var medicalQualificationResponse = 
+                await fileStorageProvider.StoreProofOfMedicalQualification(
+                  context: context,
+                  files: medicalQualificationFiles
+                );
+                print('medicalQualificationResponse ${medicalQualificationResponse}');
+                //nextPage(context, page: const Placeholder());
+              },
+            );
+          }),
+          SizedBox(height: 20.h),
           buttonWithBorder(
-            'Submit for verification',
-            buttonColor: AppColors.darkGreen,
+            'Save for later',
+            buttonColor: AppColors.white,
+            borderColor: AppColors.darkGreen,
             fontSize: 15.sp,
             height: 56.h,
-            textColor: AppColors.white,
+            //busy: authProvider.isLoading,
+            textColor: AppColors.darkGreen,
             fontWeight: FontWeight.w300,
             onTap: () {
-              nextPage(context, page: const Placeholder());
+              
             },
           ),
-          SizedBox(height: 20.h),
         ],
       ),
     );

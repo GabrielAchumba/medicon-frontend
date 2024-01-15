@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
 import 'package:medicon/ui/utils/colors.dart';
 
-void errorSnackBar(BuildContext context, String title) {
+void errorSnackBar(BuildContext context, String title, {int duration = 2}) {
   final Flushbar<void> flushBar = Flushbar<void>(
     title: title,
     titleText: Row(
@@ -36,7 +36,7 @@ void errorSnackBar(BuildContext context, String title) {
     borderColor: AppColors.btnRed,
     flushbarStyle: FlushbarStyle.FLOATING,
     flushbarPosition: FlushbarPosition.TOP,
-    duration: const Duration(seconds: 2),
+    duration:  Duration(seconds: duration),
     backgroundColor: const Color(0xFFE3CDC6),
   );
 

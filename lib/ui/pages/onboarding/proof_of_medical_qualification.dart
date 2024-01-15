@@ -1,8 +1,12 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:medicon/models/external_file.dart';
+import 'package:medicon/services/common/file_storage_service.dart';
 import 'package:medicon/ui/components/buttons.dart';
 import 'package:medicon/ui/components/custom_scaffold.dart';
 import 'package:medicon/ui/components/custom_textfield.dart';
 import 'package:medicon/ui/components/horizontal_dividers.dart';
+import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
 import 'package:medicon/ui/components/upload_file.dart';
 import 'package:medicon/ui/pages/auth/create_new_account.dart';
@@ -11,6 +15,7 @@ import 'package:medicon/ui/pages/onboarding/select_country.dart';
 import 'package:medicon/ui/utils/colors.dart';
 import 'package:medicon/ui/utils/router.dart';
 import 'package:medicon/utils/router.dart';
+import 'package:provider/provider.dart';
 
 
 class ProofOfMedicalQualificationScreen extends StatefulWidget {
@@ -28,9 +33,12 @@ class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualif
   TextEditingController yearOfMedicalQualification = TextEditingController();
   bool removeImage = true;
   bool removeBack = true;
+  BuildContext? _context;
+  GrouppedExternalFiles grouppedExternalFiles = GrouppedExternalFiles();
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     return CustomScaffold(
       title: '',
       removeBack: removeBack,
@@ -87,26 +95,65 @@ class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualif
           ),
           SizedBox(height: 10.h),
           UploadFileCard(
-            onTap: () {
-
-            }
+            onTap: getImageGallery
           ),
-           SizedBox(height: 20.h),
-          buttonWithBorder(
-            'Submit',
-            buttonColor: AppColors.darkGreen,
-            fontSize: 15.sp,
-            height: 56.h,
-            //busy: authProvider.isLoading,
-            textColor: AppColors.white,
-            fontWeight: FontWeight.w300,
-            onTap: () {
-              nextPage(context, page: const SelectCountryScreen());
-            },
-          ),
+          SizedBox(height: 20.h),
+          Consumer<FileStorageServices>(builder: (ctx, fileStorageProvider, child) {
+            return buttonWithBorder(
+              'Submit',
+              buttonColor: AppColors.darkGreen,
+              fontSize: 15.sp,
+              height: 56.h,
+              busy: fileStorageProvider.isLoading,
+              textColor: AppColors.white,
+              fontWeight: FontWeight.w300,
+              onTap: () async {
+                if (yearOfMedicalQualification.text.isEmpty) {
+                  errorSnackBar(context, 'Year of medical qualification cannot be empty');
+                } else {
+                  FilePayload filePayload = await fileStorageProvider.UploadFileOneByOneToGCP(
+                    context: ctx,
+                    grouppedExternalFiles: grouppedExternalFiles,
+                    groupName: widget.groupName
+                  );
+                  filePayload.others = yearOfMedicalQualification.text;
+                  Navigator.pop(context, filePayload);
+                }
+              },
+            ); 
+          }),
           SizedBox(height: 20.h),
         ],
       ),
     );
+  }
+
+  
+  Future getImageGallery() async {
+    // * Pick a File
+    FilePickerResult? result = 
+    await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'doc'],
+      );
+
+    if (result != null) {
+      grouppedExternalFiles = GrouppedExternalFiles();
+      int i = 0;
+      for (var element in result.files) {
+        i++;
+        List<int> fileBytes = element.bytes!.cast();
+        String fileName = element.name;
+        var obj = ExternalFile(
+          fileBytes, 
+          fileName
+        );
+        grouppedExternalFiles.externalFiles.add(obj);
+      }
+      successSnackBar(_context!, "File(s) reading very successful");
+    }else{
+      errorSnackBar(_context!, "File(s) reading failed, please try again");
+    }
   }
 }
