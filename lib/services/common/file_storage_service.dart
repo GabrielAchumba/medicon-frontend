@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:medicon/models/external_file.dart';
+import 'package:medicon/models/file_payload_backend.dart';
+import 'package:medicon/models/medical_qualification_file.dart';
 import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/utils/router.dart';
 import 'package:medicon/ui/pages/auth/success.dart';
@@ -61,7 +63,6 @@ class FileStorageServices with ChangeNotifier {
         response.data["url"],
         response.data["fileName"],
         response.data["originalFileName"],
-        groupName!
       ));
       print("SEEN 2 of $i");
       if(response.data["error"] != "No Error"){
@@ -123,9 +124,8 @@ class FileStorageServices with ChangeNotifier {
         results[i]["url"],
         results[i]["fileName"],
         results[i]["originalFileName"],
-        groupName!
       ));
-      if(response.data[i]["error"] == "No Error"){
+      if(results[i]["error"] == "No Error"){
          print("$i: ERROR SEEN");
         errorMessage = errorMessage + '${results[i]["originalFileName"]}' + '\n';
         checkError = true;
@@ -150,35 +150,51 @@ class FileStorageServices with ChangeNotifier {
   Future StoreProofOfMedicalQualification(
     {
     BuildContext? context,
-    List<FilePayloadBackend>? files,
+    List<MedicalQualificationFile>? medicalQualificationFiles,
   }) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
      String? tokens = sf.getString("token");
-    String url = "$baseUrl/medicalQualification/store";
+    String url = "$baseUrl/medicalQualification/create";
 
+    List<MedicalQualificationFile> _medicalQualificationFiles = medicalQualificationFiles!;
+    bool checkError = false;
+    String errorMessage = "Failed to upload file(s):\n";
+    
+    
 
     isLoading = true;
     notifyListeners();
+    //Map<String, dynamic> _body = filePayload.toJson(yearOfMedicalQualification!);
+    //print("filePayloads: ${filePayload.toJson2(yearOfMedicalQualification!)}");
+   for(int i = 0; i < _medicalQualificationFiles.length; i++){
+    String json = jsonEncode(_medicalQualificationFiles[i]);
+    print("json: $json");
     var response = await http.post(
       Uri.parse(url),
-      body: {
-        "files": files,
-      },
+      body:  json,
       headers: {
-        'Accept': 'application/json',
+        //'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $tokens',
       },
     );
     print(response.body);
     print("=================================================");
-    var dataRes = jsonDecode(response.body);
-    print(dataRes);
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      isLoading = false;
-      notifyListeners();
-    } else {
-      isLoading = false;
-      message = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
-    }
+    //var dataRes = jsonDecode(response.body);
+    final _medicalQualificationFileMap = jsonDecode(response.body) as Map<String, dynamic>;
+    print("_medicalQualificationFileMap: ${_medicalQualificationFileMap}");
+    final _medicalQualificationFile = MedicalQualificationFile.fromJson(_medicalQualificationFileMap);
+    print("_medicalQualificationFile: ${_medicalQualificationFile}");
+    
+      if(response.statusCode != 200 && response.statusCode != 201){
+         print("$i: ERROR SEEN");
+        errorMessage = errorMessage + '${_medicalQualificationFileMap["message"]}' + '\n';
+        checkError = true;
+        
+      }
+   }
+
+   isLoading = false;
+    notifyListeners();
   }
 }

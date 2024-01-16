@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:medicon/models/file_payload_backend.dart';
+
 class GrouppedExternalFiles {
   late List<ExternalFile> externalFiles;
   late String groupName;
@@ -36,24 +39,5 @@ class FilePayload {
 
   FilePayload(){
     this.filePayloads = [];
-  }
-
-}
-
-class FilePayloadBackend {
-
-  late String url;
-  late String fileName;
-  late String originalFileName;
-  late String groupName;
-
-  FilePayloadBackend(String url, 
-  String fileName, 
-  String originalFileName,
-  String groupName){
-    this.url = url;
-    this.fileName = fileName;
-    this.originalFileName = originalFileName;
-    this.groupName = groupName;
   }
 }

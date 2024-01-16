@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:medicon/models/external_file.dart';
+import 'package:medicon/models/medical_qualification_file.dart';
 import 'package:medicon/services/common/file_storage_service.dart';
 import 'package:medicon/ui/components/buttons.dart';
 import 'package:medicon/ui/components/custom_scaffold.dart';
 import 'package:medicon/ui/components/custom_textfield.dart';
 import 'package:medicon/ui/components/horizontal_dividers.dart';
+import 'package:medicon/models/file_payload_backend.dart';
 import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
 import 'package:medicon/ui/components/user_detail_card.dart';
@@ -80,7 +82,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       isPendingVerification: false
     ),
   ];
-  List<FilePayloadBackend> medicalQualificationFiles = [];
+  List<MedicalQualificationFile> medicalQualificationFiles = [];
   String yearOfMedicalQualification = "";
   @override
   Widget build(BuildContext context) {
@@ -183,14 +185,15 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
                               print("SEEN 10");
                               if (filePayload != null) {
-                                  medicalQualificationFiles = filePayload.filePayloads;
                                   yearOfMedicalQualification = filePayload.others as String;
-                                  print("Medical Qualification Files: ${medicalQualificationFiles}");
-                                  print("Year of Medical Qualification: $yearOfMedicalQualification");
+                                  medicalQualificationFiles = filePayload.filePayloads.map((FilePayloadBackend e) {
+                                    MedicalQualificationFile medicalQualificationFile = 
+                                    MedicalQualificationFile(e.url, e.fileName, e.originalFileName,
+                                    yearOfMedicalQualification, "xyz", true);
+                                    return medicalQualificationFile;
+                                  }).toList();
+                                  
                                   if(medicalQualificationFiles.length > 0){
-                                    print("Medical Qualification Files[0].originalFileName: ${medicalQualificationFiles[0].originalFileName}");
-                                    print("Medical Qualification Files[0].fileName: ${medicalQualificationFiles[0].fileName}");
-                                    print("Medical Qualification Files[0].url: ${medicalQualificationFiles[0].url}");
                                     pendingVerificationProfiles.add(notVerifiedProfiles[index]);
                                   _index = pendingVerificationProfiles.length;
                                     notVerifiedProfiles[index].isPendingVerification = true;
@@ -227,12 +230,16 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               fontWeight: FontWeight.w300,
               busy: fileStorageProvider.isLoading,
               onTap: ()async  {
-                var medicalQualificationResponse = 
-                await fileStorageProvider.StoreProofOfMedicalQualification(
-                  context: context,
-                  files: medicalQualificationFiles
-                );
-                print('medicalQualificationResponse ${medicalQualificationResponse}');
+                if(medicalQualificationFiles.length > 0){
+                  print('medicalQualificationFiles-1 ${medicalQualificationFiles}');
+                  print("isLoading-1: ${fileStorageProvider.isLoading}");
+                  var medicalQualificationResponse = 
+                  await fileStorageProvider.StoreProofOfMedicalQualification(
+                    context: context,
+                    medicalQualificationFiles: medicalQualificationFiles
+                  );
+                  print("isLoading-2: ${fileStorageProvider.isLoading}");
+                }
                 //nextPage(context, page: const Placeholder());
               },
             );
