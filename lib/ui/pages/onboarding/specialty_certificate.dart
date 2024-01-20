@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:medicon/models/external_file.dart';
@@ -7,30 +5,33 @@ import 'package:medicon/services/common/file_storage_service.dart';
 import 'package:medicon/ui/components/buttons.dart';
 import 'package:medicon/ui/components/custom_scaffold.dart';
 import 'package:medicon/ui/components/custom_textfield.dart';
+import 'package:medicon/ui/components/custom_textfield2.dart';
 import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
 import 'package:medicon/ui/components/upload_file.dart';
+import 'package:medicon/ui/pages/onboarding/search_specialty.dart';
 import 'package:medicon/ui/utils/colors.dart';
+import 'package:medicon/ui/utils/specialties.dart';
 import 'package:provider/provider.dart';
 
 
-class ProofOfMedicalQualificationScreen extends StatefulWidget {
+class SpecialtyCertificateScreen extends StatefulWidget {
 
   final String groupName;
 
-  const ProofOfMedicalQualificationScreen(this.groupName,
+  const SpecialtyCertificateScreen(this.groupName,
   {super.key});
   @override
-  _ProofOfMedicalQualificationScreenState createState() => _ProofOfMedicalQualificationScreenState();
+  _SpecialtyCertificateScreenState createState() => _SpecialtyCertificateScreenState();
 }
 
-class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualificationScreen> {
+class _SpecialtyCertificateScreenState extends State<SpecialtyCertificateScreen> {
 
-  TextEditingController yearOfMedicalQualification = TextEditingController();
   bool removeImage = true;
   bool removeBack = true;
   BuildContext? _context;
   GrouppedExternalFiles grouppedExternalFiles = GrouppedExternalFiles();
+  TextEditingController specialty = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,25 +58,76 @@ class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualif
             color: AppColors.textBlack,
             fontWeight:  FontWeight.w200,
           ),
+          specialty.text.isNotEmpty
+              ? CustomTextField2(
+                  title: 'Specialty',
+                  textInputType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
+                  controller: specialty,
+                  readOnly: true,
+                  onTap: () async {
+                    Specialty? res = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SearchSpecialty(),
+                      ),
+                    );
+                    if (res != null) {
+                      specialty.text = res.specialty;
+                    }
+                    setState(() {});
+                  },
+                  suffix: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 10.h),
+                        child: Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: AppColors.grey,
+                          size: 28.h,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+            : CustomTextField(
+            hintText: 'Select Specialty',
+            textInputType: TextInputType.text,
+            textInputAction: TextInputAction.next,
+            controller: specialty,
+            readOnly: true,
+            onTap: () async {
+              Specialty? res = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchSpecialty(),
+                ),
+              );
+              if (res != null) {
+                specialty.text = res.specialty;
+                //code.text = res.code!;
+                //selectedCountry = res.sId!;
+              }
+              setState(() {});
+            },
+            suffix: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 10.h),
+                  child: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: AppColors.textBlack,
+                    size: 28.h,
+                  ),
+                ),
+              ],
+            ),
+          ),
           SizedBox(height: 50.h),
           regularText(
-            'In what year did you qualify to practice medicine?',
-            fontSize: 14.sp,
-            textAlign: TextAlign.start,
-            color: AppColors.textBlack,
-            fontWeight:  FontWeight.w400,
-          ),
-          SizedBox(height: 20.h),
-          CustomTextField(
-            hintText: 'Year of Medical Qualification',
-            controller: yearOfMedicalQualification,
-            // maxLength: 11,
-            // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            textInputAction: TextInputAction.done,
-          ),
-          SizedBox(height: 20.h),
-          regularText(
-            'Please upload medical qualification\n(Certificate of qualification)',
+            'Upload Certificate of Specialty Registration',
             fontSize: 14.sp,
             textAlign: TextAlign.start,
             color: AppColors.textBlack,
@@ -96,16 +148,6 @@ class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualif
             },
             onPressed:getImageGallery,
           ),
-          /* SizedBox(height: 20.h),
-          buttonWithBorder(
-              'Upload File',
-              buttonColor: AppColors.darkGreen,
-              fontSize: 15.sp,
-              height: 56.h,
-              textColor: AppColors.white,
-              fontWeight: FontWeight.w300,
-              onTap: getImageGallery,
-          ), */
           SizedBox(height: 20.h),
           Consumer<FileStorageServices>(builder: (ctx, fileStorageProvider, child) {
             return buttonWithBorder(
@@ -117,17 +159,13 @@ class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualif
               textColor: AppColors.white,
               fontWeight: FontWeight.w300,
               onTap: () async {
-                if (yearOfMedicalQualification.text.isEmpty) {
-                  errorSnackBar(context, 'Year of medical qualification cannot be empty');
-                } else {
-                  FilePayload filePayload = await fileStorageProvider.UploadFileOneByOneToGCP(
+               FilePayload filePayload = await fileStorageProvider.UploadFileOneByOneToGCP(
                     context: ctx,
                     grouppedExternalFiles: grouppedExternalFiles,
                     groupName: widget.groupName
                   );
-                  filePayload.others = yearOfMedicalQualification.text;
+                  filePayload.others = specialty.text;
                   Navigator.pop(context, filePayload);
-                }
               },
             ); 
           }),
@@ -138,7 +176,7 @@ class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualif
   }
 
   
-  Future getImageGallery() async {
+    Future getImageGallery() async {
     // * Pick a File
 
     try {

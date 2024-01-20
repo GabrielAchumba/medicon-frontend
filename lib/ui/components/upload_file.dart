@@ -6,10 +6,12 @@ import 'package:medicon/ui/utils/colors.dart';
 class UploadFileCard extends StatefulWidget {
 
   final VoidCallback onTap;
+  final Function onPressed;
 
   const UploadFileCard({
     Key? key,
     required this.onTap,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class _UploadFileCardState extends State<UploadFileCard> {
         radius: Radius.circular(20.h),
         child: Container(
           alignment: Alignment.center,
-          height: 200.h,
+          height: 220.h,
           //margin: EdgeInsets.symmetric(horizontal: 20.h, vertical: 5.h),
             padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 15.h),
             decoration: BoxDecoration(
@@ -65,16 +67,28 @@ class _UploadFileCardState extends State<UploadFileCard> {
                 ),
                 SizedBox(height: 20.h),
                 Container(
-                  height: 40.h,
-                  width: 40.h,
-                  alignment: Alignment.center,
+                  height: 50.h,
+                  width: 50.h,
+                  alignment: Alignment.centerRight,
                   decoration: BoxDecoration(
                     color:  AppColors.darkGreen,
                   ),
-                  child: Icon(
-                    Icons.add,
-                    color:  AppColors.white,
-                    size: 30.h,
+    
+                  child: ElevatedButton.icon(
+                    label: Text(''),
+                    onPressed: (){
+                      widget.onPressed();
+                    },
+                    icon: Icon(Icons.add),
+                   style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      backgroundColor: AppColors.darkGreen,
+                      foregroundColor: AppColors.white,
+                      fixedSize: Size(30.h, 30.h),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ), 
                   ),
                 ),
             ],

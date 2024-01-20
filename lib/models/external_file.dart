@@ -14,10 +14,13 @@ class GrouppedExternalFiles {
 class ExternalFile {
   late List<int> imageBytes;
   late String fileName;
+  late String filePath;
 
-  ExternalFile(List<int> imageBytes, String fileName){
+  ExternalFile(List<int> imageBytes, String fileName, 
+  String filePath){
     this.imageBytes = imageBytes;
     this.fileName = fileName;
+    this.filePath = filePath;
   }
   ExternalFile.fromJson(dynamic json) {
     imageBytes = json['imageBytes'];

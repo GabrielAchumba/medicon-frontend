@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:medicon/models/external_file.dart';
@@ -14,19 +12,19 @@ import 'package:medicon/ui/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 
-class ProofOfMedicalQualificationScreen extends StatefulWidget {
+class CurrentEmploymentScreen extends StatefulWidget {
 
   final String groupName;
 
-  const ProofOfMedicalQualificationScreen(this.groupName,
+  const CurrentEmploymentScreen(this.groupName,
   {super.key});
   @override
-  _ProofOfMedicalQualificationScreenState createState() => _ProofOfMedicalQualificationScreenState();
+  _CurrentEmploymentScreenState createState() => _CurrentEmploymentScreenState();
 }
 
-class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualificationScreen> {
+class _CurrentEmploymentScreenState extends State<CurrentEmploymentScreen> {
 
-  TextEditingController yearOfMedicalQualification = TextEditingController();
+  TextEditingController dateStarted = TextEditingController();
   bool removeImage = true;
   bool removeBack = true;
   BuildContext? _context;
@@ -59,7 +57,7 @@ class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualif
           ),
           SizedBox(height: 50.h),
           regularText(
-            'In what year did you qualify to practice medicine?',
+            'Current Employment (date started)',
             fontSize: 14.sp,
             textAlign: TextAlign.start,
             color: AppColors.textBlack,
@@ -67,8 +65,8 @@ class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualif
           ),
           SizedBox(height: 20.h),
           CustomTextField(
-            hintText: 'Year of Medical Qualification',
-            controller: yearOfMedicalQualification,
+            hintText: 'Date of employment',
+            controller: dateStarted,
             // maxLength: 11,
             // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             textInputAction: TextInputAction.done,
@@ -91,21 +89,11 @@ class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualif
           ),
           SizedBox(height: 10.h),
           UploadFileCard(
-            onTap: (){
+           onTap: (){
 
             },
             onPressed:getImageGallery,
           ),
-          /* SizedBox(height: 20.h),
-          buttonWithBorder(
-              'Upload File',
-              buttonColor: AppColors.darkGreen,
-              fontSize: 15.sp,
-              height: 56.h,
-              textColor: AppColors.white,
-              fontWeight: FontWeight.w300,
-              onTap: getImageGallery,
-          ), */
           SizedBox(height: 20.h),
           Consumer<FileStorageServices>(builder: (ctx, fileStorageProvider, child) {
             return buttonWithBorder(
@@ -117,15 +105,15 @@ class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualif
               textColor: AppColors.white,
               fontWeight: FontWeight.w300,
               onTap: () async {
-                if (yearOfMedicalQualification.text.isEmpty) {
-                  errorSnackBar(context, 'Year of medical qualification cannot be empty');
+                if (dateStarted.text.isEmpty) {
+                  errorSnackBar(context, 'Current Employement (date started) cannot be empty ');
                 } else {
                   FilePayload filePayload = await fileStorageProvider.UploadFileOneByOneToGCP(
                     context: ctx,
                     grouppedExternalFiles: grouppedExternalFiles,
                     groupName: widget.groupName
                   );
-                  filePayload.others = yearOfMedicalQualification.text;
+                  filePayload.others = dateStarted.text;
                   Navigator.pop(context, filePayload);
                 }
               },
@@ -138,7 +126,7 @@ class _ProofOfMedicalQualificationScreenState extends State<ProofOfMedicalQualif
   }
 
   
-  Future getImageGallery() async {
+    Future getImageGallery() async {
     // * Pick a File
 
     try {

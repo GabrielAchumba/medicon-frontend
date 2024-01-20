@@ -5,6 +5,7 @@ import 'package:medicon/ui/components/custom_scaffold.dart';
 import 'package:medicon/ui/components/custom_textfield.dart';
 import 'package:medicon/ui/components/custom_textfield2.dart';
 import 'package:medicon/ui/components/horizontal_dividers.dart';
+import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
 import 'package:medicon/ui/components/user_type_card.dart';
 import 'package:medicon/ui/pages/auth/create_new_account.dart';
@@ -33,7 +34,7 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
   TextEditingController country = TextEditingController();
   bool removeImage = true;
   bool removeBack = false;
-  String userType = "";
+  String userType = "Is Empty";
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +87,15 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
             textColor: AppColors.white,
             fontWeight: FontWeight.w300,
             onTap: () {
-              nextPage(context, page: UserDetailsScreen(
-                widget.country,
-                userType
-              ));
+              if (userType == "Is Empty") {
+                  errorSnackBar(context, 'Who you are cannot be empty');
+              } else {
+                nextPage(context, page: UserDetailsScreen(
+                  widget.country,
+                  userType
+                ));
+              }
+              
             },
           ),
           SizedBox(height: 20.h),

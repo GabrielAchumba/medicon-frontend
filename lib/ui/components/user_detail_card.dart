@@ -46,11 +46,11 @@ class _UserDetailCardState extends State<UserDetailCard> {
       //margin: EdgeInsets.symmetric(horizontal: 20.h, vertical: 5.h),
       padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 15.h),
       decoration: BoxDecoration(
-          color:  widget.isActive ? AppColors.darkGreen : AppColors.grey,
+          color:  widget.isActive ? AppColors.textBlack : AppColors.grey,
           borderRadius: BorderRadius.circular(20.h),
           border: Border.all(
               width: .7.h,
-              color: widget.isActive ? AppColors.darkGreen : AppColors.textBlack,
+              color: widget.isActive ? AppColors.textBlack : AppColors.textBlack,
           ),
         ),
         child: Row(
@@ -63,12 +63,12 @@ class _UserDetailCardState extends State<UserDetailCard> {
               //margin: EdgeInsets.symmetric(horizontal: 20.h, vertical: 5.h),
               //padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 15.h),
               decoration: BoxDecoration(
-                color: widget.isActive ? AppColors.white : AppColors.textBlack,
+                color: AppColors.textBlack,
                 borderRadius: BorderRadius.circular(20.h),
               ),
               child: Icon(
                 widget.iconData,
-                color: widget.isActive ? AppColors.darkGreen : widget.iconColor,
+                color: widget.iconColor,
                 size: 30.h,
               ),
             ),
@@ -76,7 +76,7 @@ class _UserDetailCardState extends State<UserDetailCard> {
             regularText(
               widget.title,
               fontSize: 15.sp,
-              color: widget.isActive ? AppColors.white : AppColors.textBlack,
+              color: widget.isActive ? AppColors.black : AppColors.textBlack,
               fontWeight: FontWeight.w400,
               textAlign: TextAlign.center
             ),
@@ -88,12 +88,12 @@ class _UserDetailCardState extends State<UserDetailCard> {
               //margin: EdgeInsets.symmetric(horizontal: 20.h, vertical: 5.h),
               //padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 15.h),
               decoration: BoxDecoration(
-                color:  widget.isActive ? AppColors.white :AppColors.darkGreen,
+                color:  AppColors.darkGreen,
                 borderRadius: BorderRadius.circular(20.h),
               ),
               child: Icon(
                 Icons.check,
-                color:  widget.isActive ? AppColors.darkGreen :AppColors.white,
+                color:  AppColors.white,
                 size: 30.h,
               ),
             ),
