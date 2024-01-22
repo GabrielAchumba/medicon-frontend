@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medicon/services/onboarding_services/onboarding_service.dart';
 import 'package:medicon/services/user_services/user_service.dart';
 import 'package:medicon/ui/components/buttons.dart';
 import 'package:medicon/ui/components/custom_scaffold.dart';
@@ -33,120 +34,130 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
   bool removeBack = false;
 
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => Provider.of<OnboardingServices>(context, listen: false).GetUserCountry());
+  } 
+
+  @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      title: '',
-      removeBack: removeBack,
-      removeImage: removeImage,
-      child: ListView(
-        padding: EdgeInsets.all(20.h),
-        children: [
-          regularText(
-            'Add History',
-            fontSize: 25.sp,
-            textAlign: TextAlign.start,
-            fontWeight:  FontWeight.w600,
-            color: AppColors.black
-          ),
-          SizedBox(height: 150.h),
-          regularText(
-            'Which country are you from?',
-            fontSize: 16.sp,
-            textAlign: TextAlign.start,
-            color: AppColors.textBlack
-          ),
-          SizedBox(height: 30.h),
-          country.text.isNotEmpty
-              ? CustomTextField2(
-                  title: 'Country',
-                  textInputType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
-                  controller: country,
-                  readOnly: true,
-                  onTap: () async {
-                    Country? res = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SearchCountry(),
+    return Consumer<OnboardingServices>(
+      builder: (context, provider, child) {
+        country.text = provider.userCountry;
+        return CustomScaffold(
+          title: '',
+          removeBack: removeBack,
+          removeImage: removeImage,
+          child: ListView(
+            padding: EdgeInsets.all(20.h),
+            children: [
+              regularText(
+                'Add History',
+                fontSize: 25.sp,
+                textAlign: TextAlign.start,
+                fontWeight:  FontWeight.w600,
+                color: AppColors.black
+              ),
+              SizedBox(height: 150.h),
+              regularText(
+                'Which country are you from?',
+                fontSize: 16.sp,
+                textAlign: TextAlign.start,
+                color: AppColors.textBlack
+              ),
+              SizedBox(height: 30.h),
+              country.text.isNotEmpty
+                  ? CustomTextField2(
+                      title: 'Country',
+                      textInputType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      controller: country,
+                      readOnly: true,
+                      onTap: () async {
+                        Country? res = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SearchCountry(),
+                          ),
+                        );
+                        if (res != null) {
+                          country.text = res.country;
+                          //code.text = res.code!;
+                          //selectedCountry = res.sId!;
+                        }
+                        setState(() {});
+                      },
+                      suffix: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: 10.h),
+                            child: Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: AppColors.grey,
+                              size: 28.h,
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                    if (res != null) {
-                      country.text = res.country;
-                      //code.text = res.code!;
-                      //selectedCountry = res.sId!;
-                    }
-                    setState(() {});
-                  },
-                  suffix: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 10.h),
-                        child: Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          color: AppColors.grey,
-                          size: 28.h,
-                        ),
+                    )
+                : CustomTextField(
+                hintText: 'Select Country',
+                textInputType: TextInputType.text,
+                textInputAction: TextInputAction.next,
+                controller: country,
+                readOnly: true,
+                onTap: () async {
+                  Country? res = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SearchCountry(),
+                    ),
+                  );
+                  if (res != null) {
+                    country.text = res.country;
+                    //code.text = res.code!;
+                    //selectedCountry = res.sId!;
+                  }
+                  setState(() {});
+                },
+                suffix: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: 10.h),
+                      child: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: AppColors.textBlack,
+                        size: 28.h,
                       ),
-                    ],
-                  ),
-                )
-            : CustomTextField(
-            hintText: 'Select Country',
-            textInputType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-            controller: country,
-            readOnly: true,
-            onTap: () async {
-              Country? res = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SearchCountry(),
+                    ),
+                  ],
                 ),
-              );
-              if (res != null) {
-                country.text = res.country;
-                //code.text = res.code!;
-                //selectedCountry = res.sId!;
-              }
-              setState(() {});
-            },
-            suffix: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 10.h),
-                  child: Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    color: AppColors.textBlack,
-                    size: 28.h,
-                  ),
                 ),
-              ],
-            ),
-            ),
-          SizedBox(height: 30.h),
-          buttonWithBorder(
-            'Continue',
-            buttonColor: AppColors.darkGreen,
-            fontSize: 15.sp,
-            height: 56.h,
-            textColor: AppColors.white,
-            fontWeight: FontWeight.w300,
-            onTap: () {
-              if (country.text.isEmpty) {
-                  errorSnackBar(context, 'Selected country cannot be empty ');
-              }else{
-                nextPage(context, page:  SelectUserScreen(
-                country.text,
-                ));
-              }
-              
-            },
+              SizedBox(height: 30.h),
+              buttonWithBorder(
+                'Continue',
+                buttonColor: AppColors.darkGreen,
+                fontSize: 15.sp,
+                height: 56.h,
+                textColor: AppColors.white,
+                fontWeight: FontWeight.w300,
+                onTap: () {
+                  if (country.text.isEmpty) {
+                      errorSnackBar(context, 'Selected country cannot be empty ');
+                  }else{
+                    nextPage(context, page:  SelectUserScreen(
+                    country.text,
+                    ));
+                  }
+                  
+                },
+              ),
+              SizedBox(height: 20.h),
+            ],
           ),
-          SizedBox(height: 20.h),
-        ],
-      ),
-    );
+        );
+      });
   }
 }

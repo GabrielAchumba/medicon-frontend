@@ -15,8 +15,13 @@ class OnboardingServices with ChangeNotifier {
   bool isLoading = false;
   String status = "";
   String message = "";
-  //String baseUrl = "http://localhost:8000";
-  String baseUrl = "https://medicon-backend.vercel.app";
+  String baseUrl = "http://localhost:8000";
+  String userSpecialization = "";
+  String userCountry = "";
+  bool isGeneralPractitioner = false;
+  bool isSpecialist = false;
+  String userType = "Is Empty";
+  //String baseUrl = "https://medicon-backend.vercel.app";
 
   Future StoreProofOfMedicalQualification(
     {
@@ -398,6 +403,374 @@ class OnboardingServices with ChangeNotifier {
     print(dataRes);
     if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading = false;
+      notifyListeners();
+
+    } else {
+      isLoading = false;
+      notifyListeners();
+      erroMessage = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+    }
+
+    return erroMessage;
+  }
+
+  Future<String> GetUserCountry({
+    BuildContext? context,
+    Map<String, dynamic>? user,
+  }) async {
+   
+   SharedPreferences sf = await SharedPreferences.getInstance();
+    String? tokens = sf.getString("token");
+    String url = "$baseUrl/user/getCurrentUser";
+    isLoading = true;
+    notifyListeners();
+    String erroMessage = "No Error";
+    
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
+      },
+    );
+    isLoading = false;
+    notifyListeners();
+    print("Status Code ${response.statusCode}");
+    var dataRes = jsonDecode(response.body);
+    
+    print(dataRes);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      isLoading = false;
+      userCountry = dataRes["country"];
+      notifyListeners();
+
+    } else {
+      isLoading = false;
+      notifyListeners();
+      erroMessage = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+    }
+
+    return erroMessage;
+  }
+
+  Future<String> GetUserSpecialization({
+    BuildContext? context,
+    Map<String, dynamic>? user,
+  }) async {
+   
+   SharedPreferences sf = await SharedPreferences.getInstance();
+    String? tokens = sf.getString("token");
+    String url = "$baseUrl/user/getCurrentUser";
+    isLoading = true;
+    notifyListeners();
+    String erroMessage = "No Error";
+    
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
+      },
+    );
+    isLoading = false;
+    notifyListeners();
+    print("Status Code ${response.statusCode}");
+    var dataRes = jsonDecode(response.body);
+    
+    print(dataRes);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      isLoading = false;
+      userSpecialization = dataRes["specialization"];
+      updateUserType(dataRes["specialization"]);
+      notifyListeners();
+
+    } else {
+      isLoading = false;
+      notifyListeners();
+      erroMessage = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+    }
+
+    return erroMessage;
+  }
+
+  void updateUserType(String _userType){
+    switch(_userType){
+      case "General Practitioner":
+      isGeneralPractitioner = true;
+      isSpecialist = false;
+      userType = _userType;
+
+      case "Specialist":
+      isGeneralPractitioner = false;
+      isSpecialist = true;
+      userType = _userType;
+    }
+
+    notifyListeners();
+  }
+
+  Future<String> GetMedicalQualificationIsPending({
+    BuildContext? context,
+    Map<String, dynamic>? user,
+  }) async {
+   
+   SharedPreferences sf = await SharedPreferences.getInstance();
+    String? tokens = sf.getString("token");
+    String url = "$baseUrl/medicalQualification/getIsPending";
+    isLoading = true;
+    notifyListeners();
+    String erroMessage = "No Error";
+    
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
+      },
+    );
+    isLoading = false;
+    notifyListeners();
+    print("Status Code ${response.statusCode}");
+    var dataRes = jsonDecode(response.body);
+    
+    print("GetMedicalQualificationIsPending: ${dataRes}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      isLoading = false;
+      //userSpecialization = dataRes["specialization"];
+      notifyListeners();
+
+    } else {
+      isLoading = false;
+      notifyListeners();
+      erroMessage = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+    }
+
+    return erroMessage;
+  }
+
+  Future<String> GetMedicalRegistrationIsPending({
+    BuildContext? context,
+    Map<String, dynamic>? user,
+  }) async {
+   
+   SharedPreferences sf = await SharedPreferences.getInstance();
+    String? tokens = sf.getString("token");
+    String url = "$baseUrl/medicalRegistration/getIsPending";
+    isLoading = true;
+    notifyListeners();
+    String erroMessage = "No Error";
+    
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
+      },
+    );
+    isLoading = false;
+    notifyListeners();
+    print("Status Code ${response.statusCode}");
+    var dataRes = jsonDecode(response.body);
+    
+    print("GetMedicalRegistrationIsPending: ${dataRes}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      isLoading = false;
+      //userSpecialization = dataRes["specialization"];
+      notifyListeners();
+
+    } else {
+      isLoading = false;
+      notifyListeners();
+      erroMessage = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+    }
+
+    return erroMessage;
+  }
+
+  Future<String> GetSpecialtyCertificateIsPending({
+    BuildContext? context,
+    Map<String, dynamic>? user,
+  }) async {
+   
+   SharedPreferences sf = await SharedPreferences.getInstance();
+    String? tokens = sf.getString("token");
+    String url = "$baseUrl/specialtyCertificate/getIsPending";
+    isLoading = true;
+    notifyListeners();
+    String erroMessage = "No Error";
+    
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
+      },
+    );
+    isLoading = false;
+    notifyListeners();
+    print("Status Code ${response.statusCode}");
+    var dataRes = jsonDecode(response.body);
+    
+    print("GetSpecialtyCertificateIsPending: ${dataRes}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      isLoading = false;
+      //userSpecialization = dataRes["specialization"];
+      notifyListeners();
+
+    } else {
+      isLoading = false;
+      notifyListeners();
+      erroMessage = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+    }
+
+    return erroMessage;
+  }
+
+  Future<String> GetIdentityVerificationIsPending({
+    BuildContext? context,
+    Map<String, dynamic>? user,
+  }) async {
+   
+   SharedPreferences sf = await SharedPreferences.getInstance();
+    String? tokens = sf.getString("token");
+    String url = "$baseUrl/identityVerification/getIsPending";
+    isLoading = true;
+    notifyListeners();
+    String erroMessage = "No Error";
+    
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
+      },
+    );
+    isLoading = false;
+    notifyListeners();
+    print("Status Code ${response.statusCode}");
+    var dataRes = jsonDecode(response.body);
+    
+    print("GetIdentityVerificationIsPending: ${dataRes}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      isLoading = false;
+      //userSpecialization = dataRes["specialization"];
+      notifyListeners();
+
+    } else {
+      isLoading = false;
+      notifyListeners();
+      erroMessage = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+    }
+
+    return erroMessage;
+  }
+
+  Future<String> GetCurrentYearLicenseIsPending({
+    BuildContext? context,
+    Map<String, dynamic>? user,
+  }) async {
+   
+   SharedPreferences sf = await SharedPreferences.getInstance();
+    String? tokens = sf.getString("token");
+    String url = "$baseUrl/currentYearLicense/getIsPending";
+    isLoading = true;
+    notifyListeners();
+    String erroMessage = "No Error";
+    
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
+      },
+    );
+    isLoading = false;
+    notifyListeners();
+    print("Status Code ${response.statusCode}");
+    var dataRes = jsonDecode(response.body);
+    
+    print("GetCurrentYearLicenseIsPending: ${dataRes}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      isLoading = false;
+      //userSpecialization = dataRes["specialization"];
+      notifyListeners();
+
+    } else {
+      isLoading = false;
+      notifyListeners();
+      erroMessage = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+    }
+
+    return erroMessage;
+  }
+
+  Future<String> GetCurrentEmploymentIsPending({
+    BuildContext? context,
+    Map<String, dynamic>? user,
+  }) async {
+   
+   SharedPreferences sf = await SharedPreferences.getInstance();
+    String? tokens = sf.getString("token");
+    String url = "$baseUrl/currentEmployment/getIsPending";
+    isLoading = true;
+    notifyListeners();
+    String erroMessage = "No Error";
+    
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
+      },
+    );
+    isLoading = false;
+    notifyListeners();
+    print("Status Code ${response.statusCode}");
+    var dataRes = jsonDecode(response.body);
+    
+    print("GetCurrentEmploymentIsPending: ${dataRes}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      isLoading = false;
+      //userSpecialization = dataRes["specialization"];
+      notifyListeners();
+
+    } else {
+      isLoading = false;
+      notifyListeners();
+      erroMessage = dataRes["message"] == null ? "Something went wrong, please try again" : dataRes["message"];
+    }
+
+    return erroMessage;
+  }
+
+  Future<String> GetAdditionalCertificateIsPending({
+    BuildContext? context,
+    Map<String, dynamic>? user,
+  }) async {
+   
+   SharedPreferences sf = await SharedPreferences.getInstance();
+    String? tokens = sf.getString("token");
+    String url = "$baseUrl/additionalCertificate/getIsPending";
+    isLoading = true;
+    notifyListeners();
+    String erroMessage = "No Error";
+    
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $tokens',
+      },
+    );
+    isLoading = false;
+    notifyListeners();
+    print("Status Code ${response.statusCode}");
+    var dataRes = jsonDecode(response.body);
+    
+    print("GetCurrentEmploymentIsPending: ${dataRes}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      isLoading = false;
+      //userSpecialization = dataRes["specialization"];
       notifyListeners();
 
     } else {

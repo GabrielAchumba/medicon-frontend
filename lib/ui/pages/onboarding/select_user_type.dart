@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medicon/services/onboarding_services/onboarding_service.dart';
 import 'package:medicon/services/user_services/user_service.dart';
 import 'package:medicon/ui/components/buttons.dart';
 import 'package:medicon/ui/components/custom_scaffold.dart';
@@ -34,73 +35,85 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
   TextEditingController country = TextEditingController();
   bool removeImage = true;
   bool removeBack = false;
-  String userType = "Is Empty";
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => Provider.of<OnboardingServices>(context, listen: false).GetUserSpecialization());
+  } 
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      title: '',
-      removeBack: removeBack,
-      removeImage: removeImage,
-      child: ListView(
-        padding: EdgeInsets.all(20.h),
-        children: [
-          SizedBox(height: 200.h),
-          regularText(
-            'Which of these are you?',
-            fontSize: 16.sp,
-            textAlign: TextAlign.start,
-            color: AppColors.textBlack
-          ),
-          SizedBox(height: 30.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Consumer<OnboardingServices>(
+      builder: (context, provider, child) {
+        return CustomScaffold(
+          title: '',
+          removeBack: removeBack,
+          removeImage: removeImage,
+          child: ListView(
+            padding: EdgeInsets.all(20.h),
             children: [
-              Expanded(
-                child: UserTypeCard(
-                  title: "General Practitioner",
-                  image: 'profile1.png',
-                  textColor: Colors.blueAccent,
-                  onTap: () {
-                    userType = "General Practitioner";
-                  }
-                ),
+              SizedBox(height: 200.h),
+              regularText(
+                'Which of these are you?',
+                fontSize: 16.sp,
+                textAlign: TextAlign.start,
+                color: AppColors.textBlack
               ),
-              Expanded(
-                child: UserTypeCard(
-                  title: "Specialist",
-                  image: 'profile0.png',
-                  textColor: Colors.orangeAccent,
-                  onTap: () {
-                    userType = "Specialist";
-                  }
-                ),
+              SizedBox(height: 30.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: UserTypeCard(
+                      title: "General Practitioner",
+                      image: 'profile1.png',
+                      textColor: Colors.blueAccent,
+                      backgroundColor: provider.isGeneralPractitioner == true ? 
+                      AppColors.textBlack :  AppColors.grey,
+                      onTap: () {
+                        provider.updateUserType("General Practitioner");
+                      }
+                    ),
+                  ),
+                  Expanded(
+                    child: UserTypeCard(
+                      title: "Specialist",
+                      image: 'profile0.png',
+                      onTap: () {
+                        provider.updateUserType("Specialist");
+                      },
+                      textColor: Colors.orangeAccent,
+                      backgroundColor: provider.isSpecialist == true ? 
+                      AppColors.textBlack :  AppColors.grey,
+                    ),
+                  ),
+                ],
               ),
+              SizedBox(height: 30.h),
+              buttonWithBorder(
+                'Continue',
+                buttonColor: AppColors.darkGreen,
+                fontSize: 15.sp,
+                height: 56.h,
+                textColor: AppColors.white,
+                fontWeight: FontWeight.w300,
+                onTap: () {
+                  if (provider.userType == "Is Empty") {
+                      errorSnackBar(context, 'Who you are cannot be empty');
+                  } else {
+                    nextPage(context, page: UserDetailsScreen(
+                      widget.country,
+                      provider.userType
+                    ));
+                  }
+                  
+                },
+              ),
+              SizedBox(height: 20.h),
             ],
           ),
-          SizedBox(height: 30.h),
-          buttonWithBorder(
-            'Continue',
-            buttonColor: AppColors.darkGreen,
-            fontSize: 15.sp,
-            height: 56.h,
-            textColor: AppColors.white,
-            fontWeight: FontWeight.w300,
-            onTap: () {
-              if (userType == "Is Empty") {
-                  errorSnackBar(context, 'Who you are cannot be empty');
-              } else {
-                nextPage(context, page: UserDetailsScreen(
-                  widget.country,
-                  userType
-                ));
-              }
-              
-            },
-          ),
-          SizedBox(height: 20.h),
-        ],
-      ),
-    );
+        );
+      });
   }
 }

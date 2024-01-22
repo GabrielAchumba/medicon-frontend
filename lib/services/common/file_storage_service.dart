@@ -10,8 +10,8 @@ class FileStorageServices with ChangeNotifier {
   bool isLoading = false;
   String status = "";
   String message = "";
-  //String baseUrl = "http://localhost:8000";
-  String baseUrl = "https://medicon-backend.vercel.app";
+  String baseUrl = "http://localhost:8000";
+  //String baseUrl = "https://medicon-backend.vercel.app";
 
   late final Dio _dio;
 

@@ -13,6 +13,7 @@ class SharedPreferencesService {
   static const emailKey = 'email';
   static const fullNameKey = 'fullName';
   static const id = 'id';
+  static const isOnbaordingPendingKey = "isOnbaordingPending";
 
   Future<void> setToken(String token) async {
     await sharedPreferences.setString(tokenKey, token);
@@ -20,13 +21,19 @@ class SharedPreferencesService {
     log(getToken());
   }
 
-  Future<void> setUserDetails(String fullName, String email) async {
+  Future<void> setUserDetails(String fullName, 
+  String email, bool isOnbaordingPending) async {
     await sharedPreferences.setString(emailKey, email);
     log(email);
     log(getEmail());
+
     await sharedPreferences.setString(fullNameKey, fullName);
     log(fullName);
     log(getFullName());
+
+    await sharedPreferences.setBool(isOnbaordingPendingKey, isOnbaordingPending);
+    print(isOnbaordingPending);
+    print(getIsOnbaordingPending());
   }
 
   String getToken() => sharedPreferences.getString(tokenKey) ?? "";
@@ -35,17 +42,11 @@ class SharedPreferencesService {
 
   String getFullName() => sharedPreferences.getString(fullNameKey) ?? "";
 
+  bool getIsOnbaordingPending() => sharedPreferences.getBool(isOnbaordingPendingKey) ?? false;
+
   Future<void> setId(String tokon) async {
     await sharedPreferences.setString(id, tokon);
   }
 
   String getId() => sharedPreferences.getString(id) ?? "";
-    static const onboardingCompleteKey = 'onboardingComplete';
-
-  Future<void> setOnboardingComplete() async {
-    await sharedPreferences.setBool(onboardingCompleteKey, true);
-  }
-
-  bool isOnboardingComplete() =>
-      sharedPreferences.getBool(onboardingCompleteKey) ?? false;
 }

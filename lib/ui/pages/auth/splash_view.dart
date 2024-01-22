@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:medicon/ui/pages/auth/landing_screen.dart';
+import 'package:medicon/ui/pages/dashboard/dashboard.dart';
 import 'package:medicon/ui/pages/onboarding/welcome.dart';
 import 'package:medicon/ui/utils/colors.dart';
 //import 'package:namer2/ui/pages/home/main_layout.dart';
@@ -36,15 +37,20 @@ class _SplashViewState extends State<SplashView> {
     SharedPreferences sf = await SharedPreferences.getInstance();
     String? token = sf.getString("token");
     String? fullName = sf.getString("fullName");
+    bool? isOnbaordingPending = sf.getBool("isOnbaordingPending");
+    print("isOnbaordingPending: $isOnbaordingPending");
     print(token);
     
     //nextPage(context, page: const OnboardingView());
     if(token == null || token == ""){
       nextPage(context, page: const LandingScreen());
     }
+    else if(token.isEmpty == false && isOnbaordingPending == false){
+      nextPageOnly(context, page:  WelcomeScreen(fullName!));
+    }
     else{
       //pushReplacement(context, const MainLayout());
-      nextPageOnly(context, page:  WelcomeScreen(fullName!));
+      nextPageOnly(context, page:  DasboardScreen(fullName!));
     }
   }
 

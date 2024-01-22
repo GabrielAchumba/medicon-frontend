@@ -392,6 +392,19 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => Provider.of<OnboardingServices>(context, listen: false).GetMedicalQualificationIsPending());
+    Future.microtask(() => Provider.of<OnboardingServices>(context, listen: false).GetMedicalRegistrationIsPending());
+    Future.microtask(() => Provider.of<OnboardingServices>(context, listen: false).GetAdditionalCertificateIsPending());
+    Future.microtask(() => Provider.of<OnboardingServices>(context, listen: false).GetCurrentEmploymentIsPending());
+    Future.microtask(() => Provider.of<OnboardingServices>(context, listen: false).GetCurrentYearLicenseIsPending());
+    Future.microtask(() => Provider.of<OnboardingServices>(context, listen: false).GetIdentityVerificationIsPending());
+    Future.microtask(() => Provider.of<OnboardingServices>(context, listen: false).GetAdditionalCertificateIsPending());
+    Future.microtask(() => Provider.of<OnboardingServices>(context, listen: false).GetSpecialtyCertificateIsPending());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       title: '',

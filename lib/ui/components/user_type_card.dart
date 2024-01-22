@@ -10,6 +10,7 @@ class UserTypeCard extends StatefulWidget {
   final double height;
   final double width;
   final VoidCallback onTap;
+  final Color backgroundColor;
 
   const UserTypeCard({
     Key? key,
@@ -17,6 +18,7 @@ class UserTypeCard extends StatefulWidget {
     required this.image,
     required this.textColor,
     required this.onTap,
+    required this.backgroundColor,
     this.height = 200,
     this.width = 150,
   }) : super(key: key);
@@ -38,7 +40,7 @@ class _UserTypeCardState extends State<UserTypeCard> {
       margin: EdgeInsets.symmetric(horizontal: 20.h, vertical: 5.h),
       padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 15.h),
       decoration: BoxDecoration(
-          color: AppColors.grey,
+          color: widget.backgroundColor,//AppColors.grey,
           borderRadius: BorderRadius.circular(20.h),
         ),
         child: Column(

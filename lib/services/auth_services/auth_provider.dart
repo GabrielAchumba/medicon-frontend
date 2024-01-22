@@ -23,8 +23,8 @@ class AuthServices with ChangeNotifier {
   bool isLoading = false;
   String status = "";
   String message = "";
-  //String baseUrl = "http://localhost:8000";
-  String baseUrl = "https://medicon-backend.vercel.app";
+  String baseUrl = "http://localhost:8000";
+  //String baseUrl = "https://medicon-backend.vercel.app";
   late final Dio _dio;
 
   AuthServices() : _dio = Dio();
@@ -195,8 +195,10 @@ class AuthServices with ChangeNotifier {
         print(dataRes["token"]);
         print(dataRes["fullName"]);
         print(dataRes["email"]);
+        print(dataRes["isOnbaordingPending"]);
         SharedPreferencesService(sf).setToken(dataRes["token"]);
-        SharedPreferencesService(sf).setUserDetails(dataRes["fullName"], dataRes["email"]);
+        SharedPreferencesService(sf).setUserDetails(dataRes["fullName"], 
+        dataRes["email"], dataRes["isOnbaordingPending"]);
         String fullName = dataRes["fullName"];
         nextPageOnly(context!, page:  WelcomeScreen(fullName));
         successSnackBar(context, "Login Success");

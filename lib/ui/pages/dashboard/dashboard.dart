@@ -20,8 +20,10 @@ import '../../../utils/router.dart';
 
 class DasboardScreen extends StatefulWidget {
 
+  final String fullName;
 
-  const DasboardScreen({super.key});
+  const DasboardScreen(this.fullName,
+  {super.key});
   @override
   _DasboardScreenState createState() => _DasboardScreenState();
 }
@@ -85,7 +87,7 @@ class _DasboardScreenState extends State<DasboardScreen> {
                       ),
                       children: [
                         TextSpan(
-                            text: ' Dr. Adah Jonathan ',
+                            text: ' ${widget.fullName} ',
                             style: GoogleFonts.rubik(
                               color: AppColors.black,
                               fontSize: 16.sp,
