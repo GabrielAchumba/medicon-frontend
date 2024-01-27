@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
@@ -94,15 +95,16 @@ class CustomTextField2 extends StatelessWidget {
             maxLines: maxLines,
             enabled: enabled ?? true,
             maxLength: maxLength,
-            padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 6.h),
+            padding: EdgeInsets.all(15.h),
             decoration: BoxDecoration(
+              color: AppColors.grey,
               borderRadius: BorderRadius.circular(8.h),
               border: Border.all(
                   color: isRate ? AppColors.lightGrey : AppColors.white),
             ),
             inputFormatters: inputFormatters,
             textInputAction: textInputAction,
-            style: GoogleFonts.rubik(color: AppColors.black, fontSize: 17.sp),
+            style: GoogleFonts.rubik(color: AppColors.black, fontSize: 13.sp),
             readOnly: readOnly,
             suffix: suffix,
             obscureText: obscureText,

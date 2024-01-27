@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:medicon/ui/pages/auth/landing_screen.dart';
-import 'package:medicon/ui/pages/dashboard/dashboard.dart';
+import 'package:medicon/ui/pages/dashboard/main_layout.dart';
 import 'package:medicon/ui/pages/onboarding/welcome.dart';
 import 'package:medicon/ui/utils/colors.dart';
 //import 'package:namer2/ui/pages/home/main_layout.dart';
@@ -50,7 +50,7 @@ class _SplashViewState extends State<SplashView> {
     }
     else{
       //pushReplacement(context, const MainLayout());
-      nextPageOnly(context, page:  DasboardScreen(fullName!));
+      nextPageOnly(context, page:  MainLayout(fullName: fullName!));
     }
   }
 

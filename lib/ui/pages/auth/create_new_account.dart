@@ -1,15 +1,19 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:medicon/app.dart';
 import 'package:medicon/services/auth_services/auth_provider.dart';
 import 'package:medicon/ui/components/buttons.dart';
 import 'package:medicon/ui/components/custom_scaffold.dart';
 import 'package:medicon/ui/components/custom_textfield.dart';
+import 'package:medicon/ui/components/custom_textfield2.dart';
 import 'package:medicon/ui/components/snackbar.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
 import 'package:medicon/ui/pages/auth/login.dart';
+import 'package:medicon/ui/pages/auth/search_gender.dart';
 import 'package:medicon/ui/pages/auth/terms_of_service.dart';
 import 'package:medicon/ui/utils/colors.dart';
+import 'package:medicon/ui/utils/gender.dart';
 import 'package:medicon/ui/utils/router.dart';
 import 'package:medicon/utils/router.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +33,8 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
+  TextEditingController gender = TextEditingController();
+  TextEditingController dateOfBirth = TextEditingController();
 
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
@@ -69,6 +75,208 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
             hintText: 'Last Name',
             controller: lastName,
             textInputAction: TextInputAction.done,
+          ),
+          SizedBox(height: 20.h),
+          gender.text.isNotEmpty
+              ? CustomTextField2(
+                  title: 'Gender',
+                  textInputType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
+                  controller: gender,
+                  readOnly: true,
+                  onTap: () async {
+                    Gender? res = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SearchGender(),
+                      ),
+                    );
+                    if (res != null) {
+                      gender.text = res.gender;
+                      //code.text = res.code!;
+                      //selectedCountry = res.sId!;
+                    }
+                    setState(() {});
+                  },
+                  suffix: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 10.h),
+                        child: Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: AppColors.grey,
+                          size: 28.h,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+            : CustomTextField(
+            hintText: 'Select Gender',
+            textInputType: TextInputType.text,
+            textInputAction: TextInputAction.next,
+            controller: gender,
+            readOnly: true,
+            onTap: () async {
+              Gender? res = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchGender(),
+                ),
+              );
+              if (res != null) {
+                gender.text = res.gender;
+                //code.text = res.code!;
+                //selectedCountry = res.sId!;
+              }
+              setState(() {});
+            },
+            suffixIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 10.h),
+                  child: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: AppColors.textBlack,
+                    size: 28.h,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20.h),
+          dateOfBirth.text.isNotEmpty
+              ? CustomTextField2(
+                  title: 'Date of Birth',
+                  textInputType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
+                  controller: dateOfBirth,
+                  readOnly: true,
+                  onTap: () async {
+                     DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                        builder: (context, child) => Theme(
+                          data: ThemeData.dark().copyWith(
+                            colorScheme: const ColorScheme.light(
+                            onPrimary: AppColors.white, // selected text color
+                            onSurface: AppColors.black, // default text color
+                            primary: AppColors.darkGreen, // circle color
+                            ),
+                            dialogBackgroundColor: AppColors.white,
+                            textButtonTheme: TextButtonThemeData(
+                              style: TextButton.styleFrom(
+                                textStyle: const TextStyle(
+                                  color: AppColors.black,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12,
+                                  fontFamily: 'Quicksand'
+                                ),
+                               /*  primary: AppColors.darkGreen, // color of button's letters
+                                backgroundColor: AppColors.white,
+                                shape: RoundedRectangleBorder(
+                                  side: const BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                    style: BorderStyle.solid
+                                  ),
+                                  borderRadius: BorderRadius.circular(50)
+                                ), */
+                              ),
+                            ),
+                            
+                          ),
+                          child: child!,
+                        ),
+                    );
+
+                    if (pickedDate != null) {
+                      dateOfBirth.text = pickedDate.toString().split(" ")[0];;
+                    }
+                    setState(() {});
+                  },
+                  suffixIcon: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 10.h),
+                        child: Icon(
+                          Icons.calendar_today,
+                          color: AppColors.grey,
+                          size: 28.h,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+            : CustomTextField(
+            hintText: 'Date of Birth',
+            textInputType: TextInputType.text,
+            textInputAction: TextInputAction.next,
+            controller: dateOfBirth,
+            readOnly: true,
+            onTap: () async {
+              DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                        builder: (context, child) => Theme(
+                          data: ThemeData.dark().copyWith(
+                            colorScheme: const ColorScheme.light(
+                            onPrimary: AppColors.white, // selected text color
+                            onSurface: AppColors.black, // default text color
+                            primary: AppColors.darkGreen, // circle color
+                            ),
+                            dialogBackgroundColor: AppColors.white,
+                            textButtonTheme: TextButtonThemeData(
+                              style: TextButton.styleFrom(
+                                textStyle: const TextStyle(
+                                  color: AppColors.black,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12,
+                                  fontFamily: 'Quicksand'
+                                ),
+                                /* primary: AppColors.darkGreen, // color of button's letters
+                                backgroundColor: AppColors.white,
+                                shape: RoundedRectangleBorder(
+                                  side: const BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                    style: BorderStyle.solid
+                                  ),
+                                  borderRadius: BorderRadius.circular(50)
+                                ), */
+                              ),
+                            ),
+                            
+                          ),
+                          child: child!,
+                        ),
+                );
+
+              if (pickedDate != null) {
+                dateOfBirth.text = pickedDate.toString().split(" ")[0];
+              }
+              setState(() {});
+            },
+            suffixIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 10.h),
+                  child: Icon(
+                    Icons.calendar_today,
+                    color: AppColors.textBlack,
+                    size: 28.h,
+                  ),
+                ),
+              ],
+            ),
           ),
           SizedBox(height: 20.h),
           CustomTextField(
@@ -197,7 +405,9 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                     lastName.text.isEmpty ||
                     email.text.isEmpty ||
                     password.text.isEmpty ||
-                    confirmPassword.text.isEmpty) {
+                    confirmPassword.text.isEmpty ||
+                    gender.text.isEmpty ||
+                    dateOfBirth.text.isEmpty) {
                   errorSnackBar(context, 'All fields cannot be empty');
                 } else if (accept == false) {
                   errorSnackBar(context, 'Agree to the terms and conditions');
@@ -209,6 +419,8 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                     email: email.text,
                     password: password.text,
                     confirmPassword: confirmPassword.text,
+                    gender: gender.text,
+                    dateOfBirth: dateOfBirth.text
                   );
                 }
               },

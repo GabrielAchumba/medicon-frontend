@@ -18,17 +18,16 @@ import 'package:provider/provider.dart';
 
 import '../../../utils/router.dart';
 
-class DasboardScreen extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
 
   final String fullName;
 
-  const DasboardScreen(this.fullName,
-  {super.key});
+  const HomeScreen({super.key, required this.fullName});
   @override
-  _DasboardScreenState createState() => _DasboardScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _DasboardScreenState extends State<DasboardScreen> {
+class _HomeScreenState extends State<HomeScreen> {
 
 
   bool isLoading = false;

@@ -50,346 +50,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
   bool removeImage = true;
   bool removeBack = true;
-  int _index = -1;
-  //List<NotVerifiedProfile> pendingVerificationProfiles = [];
-  List<NotVerifiedProfile> notVerifiedProfiles = [
-    NotVerifiedProfile(
-      title: 'Proof of medical qualification',
-      iconColor: Colors.blueAccent,
-      iconData: Icons.access_alarm_outlined,
-      isActive: false,
-      isPendingVerification: false
-    ),
-    NotVerifiedProfile(
-      title: 'Full Medical Registration',
-      iconColor: Colors.redAccent,
-      iconData: Icons.person_2_outlined,
-      isActive: false,
-      isPendingVerification: false
-    ),
-    NotVerifiedProfile(
-      title: 'Current Year License',
-      iconColor: Colors.orangeAccent,
-      iconData: Icons.lightbulb_outline,
-      isActive: false,
-      isPendingVerification: false
-    ),
-    NotVerifiedProfile(
-      title: 'Additional Certificates',
-      iconColor: Colors.orangeAccent,
-      iconData: Icons.lightbulb_outline,
-      isActive: false,
-      isPendingVerification: false
-    ),
-    NotVerifiedProfile(
-      title: 'Identity Verification',
-      iconColor: Colors.redAccent,
-      iconData: Icons.perm_identity_outlined,
-      isActive: false,
-      isPendingVerification: false
-    ),
-    NotVerifiedProfile(
-      title: 'Current Employment',
-      iconColor: Colors.greenAccent,
-      iconData: Icons.badge_outlined,
-      isActive: false,
-      isPendingVerification: false
-    ),
-    NotVerifiedProfile(
-      title: 'Specialty Registration',
-      iconColor: Colors.greenAccent,
-      iconData: Icons.badge_outlined,
-      isActive: false,
-      isPendingVerification: false
-    ),
-  ];
-  List<MedicalQualificationFile> medicalQualificationFiles = [];
-  String yearOfMedicalQualification = "";
-  String dateStarted = "";
-  String specialty = "";
-  List<MedicalRegistrationFile> medicalRegistrationFiles = [];
-  List<CurrentYearLicenseFile> currentYearLicenseFiles = [];
-  List<AdditionalCertificateFile> additionalCertificateFiles = [];
-  List<CurrentEmploymentFile> currentEmploymentFiles = [];
-  List<IdentityVerificationFile> identityVerificationFiles = [];//
-  List<SpecialtyCertificateFile> specialtyCertificateFiles = [];
-
-  void set_index(){
-    _index = 0;
-    if(medicalQualificationFiles.length > 0){//
-      _index = _index + 1;
-    }
-    if(medicalRegistrationFiles.length > 0){//
-      _index = _index + 1;
-    }
-    if(additionalCertificateFiles.length > 0){//
-      _index = _index + 1;
-    }
-    if(currentEmploymentFiles.length > 0){//
-      _index = _index + 1;
-    }
-    if(identityVerificationFiles.length > 0){
-      _index = _index + 1;
-    }
-    if(specialtyCertificateFiles.length > 0){//
-      _index = _index + 1;
-    }
-    if(currentYearLicenseFiles.length > 0){//
-      _index = _index + 1;
-    }
-
-    setState(() {});
-  }
-
-  void setMedicalQualificationFiles(FilePayload? filePayload, int index){
-    if (filePayload != null) {
-      yearOfMedicalQualification = filePayload.others as String;
-      medicalQualificationFiles = filePayload.filePayloads.map((FilePayloadBackend e) {
-        MedicalQualificationFile medicalQualificationFile = 
-        MedicalQualificationFile(e.url, e.fileName, e.originalFileName,
-        yearOfMedicalQualification, "xyz", true);
-        return medicalQualificationFile;
-      }).toList();
-      
-      if(medicalQualificationFiles.length > 0){
-        set_index();
-        notVerifiedProfiles[index].isPendingVerification = true;
-      }
-     
-      if(filePayload.errorMessage != "No Error"){
-        errorSnackBar(context, 
-        filePayload.errorMessage!, 
-        duration: 10);
-      }
-      /* else{
-        successSnackBar(context, "Files stored successfully");
-      } */
-    }
-
-    setState(() {});
-  }
-
-  void setMedicalRegistrationFiles(FilePayload? filePayload, int index){
-    if (filePayload != null) {
-      medicalRegistrationFiles = filePayload.filePayloads.map((FilePayloadBackend e) {
-        MedicalRegistrationFile medicalRegistrationFile = 
-        MedicalRegistrationFile(e.url, e.fileName, e.originalFileName,
-        "xyz", true);
-        return medicalRegistrationFile;
-      }).toList();
-      
-      if(medicalRegistrationFiles.length > 0){
-        set_index();
-        notVerifiedProfiles[index].isPendingVerification = true;
-      }
-      if(filePayload.errorMessage != "No Error"){
-        errorSnackBar(context, 
-        filePayload.errorMessage!, 
-        duration: 10);
-      }
-    
-    }
-
-    setState(() {});
-  }
   
-  void setCurrentYearOfLicenseFiles(FilePayload? filePayload, int index){
-    if (filePayload != null) {
-      currentYearLicenseFiles = filePayload.filePayloads.map((FilePayloadBackend e) {
-        CurrentYearLicenseFile currentYearLicenseFile = 
-        CurrentYearLicenseFile(e.url, e.fileName, e.originalFileName,
-        "xyz", true);
-        return currentYearLicenseFile;
-      }).toList();
-      
-      if(currentYearLicenseFiles.length > 0){
-        set_index();
-        notVerifiedProfiles[index].isPendingVerification = true;
-      }
-      if(filePayload.errorMessage != "No Error"){
-        errorSnackBar(context, 
-        filePayload.errorMessage!, 
-        duration: 10);
-      }
-    
-    }
-
-    setState(() {});
-  }
-
-  void setAdditionalCertificateFiles(FilePayload? filePayload, int index){
-    if (filePayload != null) {
-      additionalCertificateFiles = filePayload.filePayloads.map((FilePayloadBackend e) {
-        AdditionalCertificateFile additionalCertificateFile = 
-        AdditionalCertificateFile(e.url, e.fileName, e.originalFileName,
-        "xyz", true);
-        return additionalCertificateFile;
-      }).toList();
-      
-      if(additionalCertificateFiles.length > 0){
-        set_index();
-        notVerifiedProfiles[index].isPendingVerification = true;
-      }
-      if(filePayload.errorMessage != "No Error"){
-        errorSnackBar(context, 
-        filePayload.errorMessage!, 
-        duration: 10);
-      }
-    
-    }
-
-    setState(() {});
-  }
-  
-  void setCurrentEmploymentFiles(FilePayload? filePayload, int index){
-    if (filePayload != null) {
-      dateStarted = filePayload.others as String;
-      currentEmploymentFiles = filePayload.filePayloads.map((FilePayloadBackend e) {
-        CurrentEmploymentFile currentEmploymentFile = 
-        CurrentEmploymentFile(e.url, e.fileName, e.originalFileName,
-        "xyz", dateStarted, true);
-        return currentEmploymentFile;
-      }).toList();
-      
-      if(currentEmploymentFiles.length > 0){
-        set_index();
-        notVerifiedProfiles[index].isPendingVerification = true;
-      }
-      if(filePayload.errorMessage != "No Error"){
-        errorSnackBar(context, 
-        filePayload.errorMessage!, 
-        duration: 10);
-      }
-    
-    }
-
-    setState(() {});
-  }
-
-  void setIdentityVerificationFiles(FilePayload? filePayload, int index){
-    if (filePayload != null) {
-      identityVerificationFiles = filePayload.filePayloads.map((FilePayloadBackend e) {
-        IdentityVerificationFile identityVerificationFile = 
-        IdentityVerificationFile(e.url, e.fileName, e.originalFileName,
-        "xyz", true);
-        return identityVerificationFile;
-      }).toList();
-      
-      if(identityVerificationFiles.length > 0){
-        set_index();
-        notVerifiedProfiles[index].isPendingVerification = true;
-      }
-      if(filePayload.errorMessage != "No Error"){
-        errorSnackBar(context, 
-        filePayload.errorMessage!, 
-        duration: 10);
-      }
-    
-    }
-
-    setState(() {});
-  }
-
-  void setSpecialtyCertificateFiles(FilePayload? filePayload, int index){
-    if (filePayload != null) {
-      specialty = filePayload.others as String;
-      specialtyCertificateFiles = filePayload.filePayloads.map((FilePayloadBackend e) {
-        SpecialtyCertificateFile specialtyCertificateFile = 
-        SpecialtyCertificateFile(e.url, e.fileName, e.originalFileName,
-        "xyz", true, specialty);
-        return specialtyCertificateFile;
-      }).toList();
-      
-      if(specialtyCertificateFiles.length > 0){
-        set_index();
-        notVerifiedProfiles[index].isPendingVerification = true;
-      }
-      if(filePayload.errorMessage != "No Error"){
-        errorSnackBar(context, 
-        filePayload.errorMessage!, 
-        duration: 10);
-      }
-    
-    }
-
-    setState(() {});
-  }
-
-  void uploadingOnboardingFiles (int index) async {
-    switch(notVerifiedProfiles[index].title){
-      case 'Proof of medical qualification':
-        FilePayload? filePayload = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProofOfMedicalQualificationScreen(
-            notVerifiedProfiles[index].title
-            ),
-          ),
-        );
-        setMedicalQualificationFiles(filePayload, index);
-      case 'Full Medical Registration':
-        FilePayload? filePayload = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MedicalRegistrationScreen(
-            notVerifiedProfiles[index].title
-            ),
-          ),
-        );
-        setMedicalRegistrationFiles(filePayload, index);
-      case 'Current Year License':
-        FilePayload? filePayload = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CurrentYearLicenseScreen(
-            notVerifiedProfiles[index].title
-            ),
-          ),
-        );
-        setCurrentYearOfLicenseFiles(filePayload, index);
-      case 'Additional Certificates':
-        FilePayload? filePayload = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AdditionalCertificateScreen(
-            notVerifiedProfiles[index].title
-            ),
-          ),
-        );
-        setAdditionalCertificateFiles(filePayload, index);
-      case 'Identity Verification':
-        FilePayload? filePayload = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => IdentityVerificationScreen(
-            notVerifiedProfiles[index].title
-            ),
-          ),
-        );
-        setIdentityVerificationFiles(filePayload, index);
-      case 'Current Employment':
-        FilePayload? filePayload = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CurrentEmploymentScreen(
-            notVerifiedProfiles[index].title
-            ),
-          ),
-        );
-        setCurrentEmploymentFiles(filePayload, index);
-      case 'Specialty Registration':
-        FilePayload? filePayload = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SpecialtyCertificateScreen(
-            notVerifiedProfiles[index].title
-            ),
-          ),
-        );
-        setSpecialtyCertificateFiles(filePayload, index);
-        
-    }
-  }
 
   @override
   void initState() {
@@ -406,193 +67,179 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      title: '',
-      removeBack: removeBack,
-      removeImage: removeImage,
-      child: ListView(
-        padding: EdgeInsets.all(20.h),
-        children: [
-          regularText(
-            'Verify My Account General List',
-            fontSize: 25.sp,
-            textAlign: TextAlign.start,
-            fontWeight:  FontWeight.w600,
-            color: AppColors.black
-          ),
-          SizedBox(height: 10.h),
-          regularText(
-            'Verify my details as a general practitioner',
-            fontSize: 13.sp,
-            textAlign: TextAlign.start,
-            color: AppColors.textBlack
-          ),
-          SizedBox(height: 40.h),
-          if(_index > 0)
-            Container(
-              height: 20.h,
-              margin: EdgeInsets.only(bottom: 10.h),
-              child: Row(
-                children: [
-                  ListView.builder(
-                    itemCount: notVerifiedProfiles.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index){
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AnimatedContainer(
-                            width: 40.h,
-                            height: 6.h,
-                            duration: const Duration(seconds: 1),
-                            decoration: BoxDecoration(
-                              color: index  < _index ? 
-                              AppColors.darkGreen :
-                              AppColors.textBlack,
-                            ),
-                            padding: EdgeInsets.all(4.h),
-                          ),
-                        ],
-                      );
-                    }
-                  ),
-                  SizedBox(width: 10.h),
-                  regularText(
-                    _index == 0 ? '':
-                    _index > notVerifiedProfiles.length ? 
-                    '${notVerifiedProfiles.length}/${notVerifiedProfiles.length}':
-                    '${_index}/${notVerifiedProfiles.length}',
-                    fontSize: 13.sp,
-                    textAlign: TextAlign.start,
-                    color: AppColors.black
-                  ),
-                ],
-              ),
+    return Consumer<OnboardingServices>(
+      builder: (context, onboardingServices, child) {
+        return CustomScaffold(
+        title: '',
+        removeBack: removeBack,
+        removeImage: removeImage,
+        child: ListView(
+          padding: EdgeInsets.all(20.h),
+          children: [
+            regularText(
+              'Verify My Account General List',
+              fontSize: 25.sp,
+              textAlign: TextAlign.start,
+              fontWeight:  FontWeight.w600,
+              color: AppColors.black
             ),
-          SizedBox(height: 20.h),
-          ListView.builder(
-                itemCount: notVerifiedProfiles.length,
-                shrinkWrap: true,
-                physics: const AlwaysScrollableScrollPhysics(),
-                //padding: EdgeInsets.only(top: 10.h, bottom: 100.h),
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      UserDetailCard(
-                        title: notVerifiedProfiles[index].title,
-                        iconData: notVerifiedProfiles[index].iconData,
-                        iconColor:notVerifiedProfiles[index].iconColor,
-                        cardColor: AppColors.grey,
-                        cardBorderColor: AppColors.textBlack,
-                        onTap: () async {
-                          for(var i = 0; i < notVerifiedProfiles.length; i++){
-                            notVerifiedProfiles[i].isActive = false;
-                          }
-                          notVerifiedProfiles[index].isActive = true;
-                          uploadingOnboardingFiles(index);
-                        },
-                        isActive: notVerifiedProfiles[index].isActive,
-                        isPendingVerification: notVerifiedProfiles[index].isPendingVerification,
-                      ),
-                      SizedBox(height: 20.h),
-                    ],
-                  );
+            SizedBox(height: 10.h),
+            regularText(
+              'Verify my details as a general practitioner',
+              fontSize: 13.sp,
+              textAlign: TextAlign.start,
+              color: AppColors.textBlack
+            ),
+            SizedBox(height: 40.h),
+            if(onboardingServices.Index > 0)
+              Container(
+                height: 20.h,
+                margin: EdgeInsets.only(bottom: 10.h),
+                child: Row(
+                  children: [
+                    ListView.builder(
+                      itemCount: onboardingServices.notVerifiedProfiles.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index){
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AnimatedContainer(
+                              width: 40.h,
+                              height: 6.h,
+                              duration: const Duration(seconds: 1),
+                              decoration: BoxDecoration(
+                                color: index  < onboardingServices.Index ? 
+                                AppColors.darkGreen :
+                                AppColors.textBlack,
+                              ),
+                              padding: EdgeInsets.all(4.h),
+                            ),
+                          ],
+                        );
+                      }
+                    ),
+                    SizedBox(width: 10.h),
+                    regularText(
+                      onboardingServices.Index == 0 ? '':
+                      onboardingServices.Index > onboardingServices.notVerifiedProfiles.length ? 
+                      '${onboardingServices.notVerifiedProfiles.length}/${onboardingServices.notVerifiedProfiles.length}':
+                      '${onboardingServices.Index}/${onboardingServices.notVerifiedProfiles.length}',
+                      fontSize: 13.sp,
+                      textAlign: TextAlign.start,
+                      color: AppColors.black
+                    ),
+                  ],
+                ),
+              ),
+            SizedBox(height: 20.h),
+            ListView.builder(
+                  itemCount: onboardingServices.notVerifiedProfiles.length,
+                  shrinkWrap: true,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  //padding: EdgeInsets.only(top: 10.h, bottom: 100.h),
+                  itemBuilder: (ctx, index) {
+                    return Column(
+                      children: [
+                        UserDetailCard(
+                          title: onboardingServices.notVerifiedProfiles[index].title,
+                          iconData: onboardingServices.notVerifiedProfiles[index].iconData,
+                          iconColor:onboardingServices.notVerifiedProfiles[index].iconColor,
+                          cardColor: AppColors.grey,
+                          cardBorderColor: AppColors.textBlack,
+                          onTap: () async {
+                            for(var i = 0; i < onboardingServices.notVerifiedProfiles.length; i++){
+                              onboardingServices.notVerifiedProfiles[i].isActive = false;
+                            }
+                            onboardingServices.notVerifiedProfiles[index].isActive = true;
+                            onboardingServices.uploadingOnboardingFiles(context, index);
+                          },
+                          isActive: onboardingServices.notVerifiedProfiles[index].isActive,
+                          isPendingVerification: onboardingServices.notVerifiedProfiles[index].isPendingVerification,
+                        ),
+                        SizedBox(height: 20.h),
+                      ],
+                    );
+                  },
+            ),
+            SizedBox(height: 20.h),
+            buttonWithBorder(
+                'Submit for verification',
+                buttonColor: AppColors.darkGreen,
+                fontSize: 15.sp,
+                height: 56.h,
+                textColor: AppColors.white,
+                fontWeight: FontWeight.w300,
+                busy: onboardingServices.isLoading,
+                onTap: ()async  {
+                  if(onboardingServices.medicalQualificationFiles.length > 0){
+                    await onboardingServices.StoreProofOfMedicalQualification(
+                      context: context, medicalQualificationFiles: onboardingServices.medicalQualificationFiles
+                    );
+                  }
+
+                  if(onboardingServices.medicalRegistrationFiles.length > 0){
+                    await onboardingServices.StoreMedicalRegistration(
+                      context: context, medicalRegistrationFiles: onboardingServices.medicalRegistrationFiles
+                    );
+                  }
+
+                  if(onboardingServices.currentYearLicenseFiles.length > 0){
+                    await onboardingServices.StoreCurrentYearLicenseFile(
+                      context: context, currentYearLicenseFiles: onboardingServices.currentYearLicenseFiles
+                    );
+                  }
+
+                  if(onboardingServices.additionalCertificateFiles.length > 0){
+                    await onboardingServices.StoreAdditionalCertificate(
+                      context: context, additionalCertificateFiles: onboardingServices.additionalCertificateFiles
+                    );
+                  }
+
+                  if(onboardingServices.identityVerificationFiles.length > 0){
+                    await onboardingServices.StoreIdentityVerificationFile(
+                      context: context, identityVerificationFiles: onboardingServices.identityVerificationFiles
+                    );
+                  }
+
+                  if(onboardingServices.currentEmploymentFiles.length > 0){
+                    await onboardingServices.StoreCurrentEmploymentFile(
+                      context: context, currentEmploymentFiles: onboardingServices.currentEmploymentFiles
+                    );
+                  }
+
+                  if(onboardingServices.specialtyCertificateFiles.length > 0){
+                    await onboardingServices.StoreSpecialtyCertificateFile(
+                      context: context, specialtyCertificateFiles: onboardingServices.specialtyCertificateFiles
+                    );
+                  }
+                  Map<String, dynamic> user = Map<String, dynamic> ();
+                  user["country"] = widget.country;
+                  user["specialization"] = widget.userType;
+                  String errorMessage = await onboardingServices.UpdateUser(context: context, user: user);
+                  print("errorMessage: $errorMessage");
+                  nextPage(context, page: const SuccessScreen());
                 },
-          ),
-           SizedBox(height: 20.h),
-          Consumer<OnboardingServices>(builder: (ctx, fileStorageProvider, child) {
-            return buttonWithBorder(
-              'Submit for verification',
-              buttonColor: AppColors.darkGreen,
+            ),
+            SizedBox(height: 20.h),
+            buttonWithBorder(
+              'Save for later',
+              buttonColor: AppColors.white,
+              borderColor: AppColors.darkGreen,
               fontSize: 15.sp,
               height: 56.h,
-              textColor: AppColors.white,
+              //busy: authProvider.isLoading,
+              textColor: AppColors.darkGreen,
               fontWeight: FontWeight.w300,
-              busy: fileStorageProvider.isLoading,
-              onTap: ()async  {
-                if(medicalQualificationFiles.length > 0){
-                  await fileStorageProvider.StoreProofOfMedicalQualification(
-                    context: context, medicalQualificationFiles: medicalQualificationFiles
-                  );
-                }
-
-                if(medicalRegistrationFiles.length > 0){
-                  await fileStorageProvider.StoreMedicalRegistration(
-                    context: context, medicalRegistrationFiles: medicalRegistrationFiles
-                  );
-                }
-
-                if(currentYearLicenseFiles.length > 0){
-                  await fileStorageProvider.StoreCurrentYearLicenseFile(
-                    context: context, currentYearLicenseFiles: currentYearLicenseFiles
-                  );
-                }
-
-                if(additionalCertificateFiles.length > 0){
-                  await fileStorageProvider.StoreAdditionalCertificate(
-                    context: context, additionalCertificateFiles: additionalCertificateFiles
-                  );
-                }
-
-                if(identityVerificationFiles.length > 0){
-                  await fileStorageProvider.StoreIdentityVerificationFile(
-                    context: context, identityVerificationFiles: identityVerificationFiles
-                  );
-                }
-
-                if(currentEmploymentFiles.length > 0){
-                  await fileStorageProvider.StoreCurrentEmploymentFile(
-                    context: context, currentEmploymentFiles: currentEmploymentFiles
-                  );
-                }
-
-                if(specialtyCertificateFiles.length > 0){
-                  await fileStorageProvider.StoreSpecialtyCertificateFile(
-                    context: context, specialtyCertificateFiles: specialtyCertificateFiles
-                  );
-                }
-                Map<String, dynamic> user = Map<String, dynamic> ();
-                user["country"] = widget.country;
-                user["specialization"] = widget.userType;
-                String errorMessage = await fileStorageProvider.UpdateUser(context: context, user: user);
-                print("errorMessage: $errorMessage");
-                nextPage(context, page: const SuccessScreen());
+              onTap: () {
+                
               },
-            );
-          }),
-          SizedBox(height: 20.h),
-          buttonWithBorder(
-            'Save for later',
-            buttonColor: AppColors.white,
-            borderColor: AppColors.darkGreen,
-            fontSize: 15.sp,
-            height: 56.h,
-            //busy: authProvider.isLoading,
-            textColor: AppColors.darkGreen,
-            fontWeight: FontWeight.w300,
-            onTap: () {
-              
-            },
-          ),
-        ],
-      ),
-    );
+            ),
+          ],
+        ),
+      );
+    });
   }
-}
-
-
-class NotVerifiedProfile {
-  String title;
-  Color iconColor;
-  IconData iconData;
-  bool isActive;
-  bool isPendingVerification;
-
-  NotVerifiedProfile({required this.title,
-  required this.iconColor,
-  required this.iconData,
-  required this.isActive,
-  required this.isPendingVerification});
 }

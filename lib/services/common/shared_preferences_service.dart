@@ -12,7 +12,7 @@ class SharedPreferencesService {
   static const tokenKey = 'token';
   static const emailKey = 'email';
   static const fullNameKey = 'fullName';
-  static const id = 'id';
+  static const idKey = 'id';
   static const isOnbaordingPendingKey = "isOnbaordingPending";
 
   Future<void> setToken(String token) async {
@@ -22,7 +22,7 @@ class SharedPreferencesService {
   }
 
   Future<void> setUserDetails(String fullName, 
-  String email, bool isOnbaordingPending) async {
+  String email, bool isOnbaordingPending, String id) async {
     await sharedPreferences.setString(emailKey, email);
     log(email);
     log(getEmail());
@@ -34,6 +34,10 @@ class SharedPreferencesService {
     await sharedPreferences.setBool(isOnbaordingPendingKey, isOnbaordingPending);
     print(isOnbaordingPending);
     print(getIsOnbaordingPending());
+
+    await sharedPreferences.setString(idKey, id);
+    log(id);
+    log(getFullName());
   }
 
   String getToken() => sharedPreferences.getString(tokenKey) ?? "";
@@ -44,9 +48,6 @@ class SharedPreferencesService {
 
   bool getIsOnbaordingPending() => sharedPreferences.getBool(isOnbaordingPendingKey) ?? false;
 
-  Future<void> setId(String tokon) async {
-    await sharedPreferences.setString(id, tokon);
-  }
+  String getId() => sharedPreferences.getString(idKey) ?? "";
 
-  String getId() => sharedPreferences.getString(id) ?? "";
 }

@@ -22,6 +22,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService with ChangeNotifier {
   bool isLoading = false;
+  bool isLoadingProfile = false;
+  dynamic userProfile;
   String status = "";
   String message = "";
   String baseUrl = "http://localhost:8000";

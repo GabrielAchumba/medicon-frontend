@@ -10,10 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:medicon/services/auth_services/auth_provider.dart';
 import 'package:medicon/ui/components/buttons.dart';
 import 'package:medicon/ui/components/custom_scaffold.dart';
-import 'package:medicon/ui/components/custom_textfield.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
 import 'package:medicon/ui/pages/auth/login.dart';
-import 'package:medicon/ui/pages/dashboard/dashboard.dart';
 import 'package:medicon/ui/utils/colors.dart';
 import 'package:provider/provider.dart';
 

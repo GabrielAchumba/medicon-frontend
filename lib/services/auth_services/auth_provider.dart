@@ -121,6 +121,8 @@ class AuthServices with ChangeNotifier {
     String? email,
     String? password,
     String? confirmPassword,
+    String? gender,
+    String? dateOfBirth,
   }) async {
     SharedPreferences sf = await SharedPreferences.getInstance();
      String? tokens = sf.getString("token");
@@ -137,6 +139,8 @@ class AuthServices with ChangeNotifier {
         "email": email,
         "password": password,
         "confirmPassword": confirmPassword,
+        "gender": gender,
+        "dateOfBirth": dateOfBirth,
         "department": "Nurse",
       },
       headers: {
@@ -196,9 +200,11 @@ class AuthServices with ChangeNotifier {
         print(dataRes["fullName"]);
         print(dataRes["email"]);
         print(dataRes["isOnbaordingPending"]);
+        print(dataRes["id"]);
         SharedPreferencesService(sf).setToken(dataRes["token"]);
         SharedPreferencesService(sf).setUserDetails(dataRes["fullName"], 
-        dataRes["email"], dataRes["isOnbaordingPending"]);
+        dataRes["email"], dataRes["isOnbaordingPending"],
+        dataRes["id"]);
         String fullName = dataRes["fullName"];
         nextPageOnly(context!, page:  WelcomeScreen(fullName));
         successSnackBar(context, "Login Success");
