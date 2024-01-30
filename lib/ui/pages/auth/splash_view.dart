@@ -35,6 +35,9 @@ class _SplashViewState extends State<SplashView> {
 
   void hasAccount() async{
     SharedPreferences sf = await SharedPreferences.getInstance();
+
+    //await sf.setString("token", "");
+
     String? token = sf.getString("token");
     String? fullName = sf.getString("fullName");
     bool? isOnbaordingPending = sf.getBool("isOnbaordingPending");
@@ -45,9 +48,9 @@ class _SplashViewState extends State<SplashView> {
     if(token == null || token == ""){
       nextPage(context, page: const LandingScreen());
     }
-    else if(token.isEmpty == false && isOnbaordingPending == false){
+    /* else if(token.isEmpty == false && isOnbaordingPending == false){
       nextPageOnly(context, page:  WelcomeScreen(fullName!));
-    }
+    } */
     else{
       //pushReplacement(context, const MainLayout());
       nextPageOnly(context, page:  MainLayout(fullName: fullName!));

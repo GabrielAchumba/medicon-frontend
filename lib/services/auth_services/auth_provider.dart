@@ -124,6 +124,8 @@ class AuthServices with ChangeNotifier {
     String? gender,
     String? dateOfBirth,
   }) async {
+    //print("gender: $gender");
+    //print("dateOfBirth: $dateOfBirth");
     SharedPreferences sf = await SharedPreferences.getInstance();
      String? tokens = sf.getString("token");
     String url = "$baseUrl/auth/register";
@@ -131,6 +133,7 @@ class AuthServices with ChangeNotifier {
 
     isLoading = true;
     notifyListeners();
+    //"confirmPassword": confirmPassword,
     var response = await http.post(
       Uri.parse(url),
       body: {
@@ -138,7 +141,6 @@ class AuthServices with ChangeNotifier {
         "lastName": lastName,
         "email": email,
         "password": password,
-        "confirmPassword": confirmPassword,
         "gender": gender,
         "dateOfBirth": dateOfBirth,
         "department": "Nurse",

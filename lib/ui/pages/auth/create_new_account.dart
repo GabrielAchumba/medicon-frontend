@@ -158,42 +158,34 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                      DateTime? pickedDate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
+                        firstDate: DateTime(1910),
                         lastDate: DateTime(2100),
-                        builder: (context, child) => Theme(
-                          data: ThemeData.dark().copyWith(
-                            colorScheme: const ColorScheme.light(
-                            onPrimary: AppColors.white, // selected text color
-                            onSurface: AppColors.black, // default text color
-                            primary: AppColors.darkGreen, // circle color
-                            ),
-                            dialogBackgroundColor: AppColors.white,
-                            textButtonTheme: TextButtonThemeData(
-                              style: TextButton.styleFrom(
-                                textStyle: const TextStyle(
-                                  color: AppColors.black,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 12,
-                                  fontFamily: 'Quicksand'
+                        builder: (BuildContext context, Widget? child) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              inputDecorationTheme:
+                                  InputDecorationTheme(
+                                      border: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 0.5,
+                                  color: AppColors.white,
                                 ),
-                               /*  primary: AppColors.darkGreen, // color of button's letters
+                              )),
+                              colorScheme: ColorScheme.light(
+                                  onPrimary: AppColors.white,
+                                  primary: AppColors.darkGreen,
+                                  background: AppColors.white),
+                              datePickerTheme: DatePickerThemeData(
+                                headerBackgroundColor: AppColors.darkGreen,
                                 backgroundColor: AppColors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                    style: BorderStyle.solid
-                                  ),
-                                  borderRadius: BorderRadius.circular(50)
-                                ), */
+                                headerForegroundColor: AppColors.white,
+                                surfaceTintColor: AppColors.white,
+                                dividerColor: AppColors.darkGreen,
                               ),
                             ),
-                            
-                          ),
-                          child: child!,
-                        ),
-                    );
-
+                            child: child!,
+                          );
+                        });
                     if (pickedDate != null) {
                       dateOfBirth.text = pickedDate.toString().split(" ")[0];;
                     }
@@ -223,41 +215,34 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
               DateTime? pickedDate = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100),
-                        builder: (context, child) => Theme(
-                          data: ThemeData.dark().copyWith(
-                            colorScheme: const ColorScheme.light(
-                            onPrimary: AppColors.white, // selected text color
-                            onSurface: AppColors.black, // default text color
-                            primary: AppColors.darkGreen, // circle color
-                            ),
-                            dialogBackgroundColor: AppColors.white,
-                            textButtonTheme: TextButtonThemeData(
-                              style: TextButton.styleFrom(
-                                textStyle: const TextStyle(
-                                  color: AppColors.black,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 12,
-                                  fontFamily: 'Quicksand'
-                                ),
-                                /* primary: AppColors.darkGreen, // color of button's letters
-                                backgroundColor: AppColors.white,
-                                shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                    style: BorderStyle.solid
-                                  ),
-                                  borderRadius: BorderRadius.circular(50)
-                                ), */
-                              ),
-                            ),
-                            
+                  firstDate: DateTime(1910),
+                  lastDate: DateTime(2100),   
+                  builder: (BuildContext context, Widget? child) {
+                    return Theme(
+                      data: Theme.of(context).copyWith(
+                        inputDecorationTheme:
+                            InputDecorationTheme(
+                                border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 0.5,
+                            color: AppColors.white,
                           ),
-                          child: child!,
+                        )),
+                        colorScheme: ColorScheme.light(
+                            onPrimary: AppColors.white,
+                            primary: AppColors.darkGreen,
+                            background: AppColors.white),
+                        datePickerTheme: DatePickerThemeData(
+                          headerBackgroundColor: AppColors.darkGreen,
+                          backgroundColor: AppColors.white,
+                          headerForegroundColor: AppColors.white,
+                          surfaceTintColor: AppColors.white,
+                          dividerColor: AppColors.darkGreen,
                         ),
-                );
+                      ),
+                      child: child!,
+                    );
+                  });
 
               if (pickedDate != null) {
                 dateOfBirth.text = pickedDate.toString().split(" ")[0];

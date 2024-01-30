@@ -526,6 +526,11 @@ class OnboardingServices with ChangeNotifier {
     return erroMessage;
   }
 
+  void setUserCountry(String selectedCountry){
+    userCountry = selectedCountry;
+    notifyListeners();
+  }
+
   Future<String> GetUserSpecialization({
     BuildContext? context,
     Map<String, dynamic>? user,
@@ -610,7 +615,7 @@ class OnboardingServices with ChangeNotifier {
     if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading = false;
       //userSpecialization = dataRes["specialization"];
-      notVerifiedProfiles[0].isPendingVerification = dataRes["specialization"];
+      notVerifiedProfiles[0].isPendingVerification = dataRes;
       notifyListeners();
 
     } else {
@@ -649,7 +654,7 @@ class OnboardingServices with ChangeNotifier {
     print("GetMedicalRegistrationIsPending: ${dataRes}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading = false;
-      notVerifiedProfiles[1].isPendingVerification = dataRes["specialization"];
+      notVerifiedProfiles[1].isPendingVerification = dataRes;
       notifyListeners();
 
     } else {
@@ -688,7 +693,7 @@ class OnboardingServices with ChangeNotifier {
     print("GetSpecialtyCertificateIsPending: ${dataRes}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading = false;
-      notVerifiedProfiles[6].isPendingVerification = dataRes["specialization"];
+      notVerifiedProfiles[6].isPendingVerification = dataRes;
       notifyListeners();
 
     } else {
@@ -727,7 +732,7 @@ class OnboardingServices with ChangeNotifier {
     print("GetIdentityVerificationIsPending: ${dataRes}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading = false;
-      notVerifiedProfiles[4].isPendingVerification = dataRes["specialization"];
+      notVerifiedProfiles[4].isPendingVerification = dataRes;
       notifyListeners();
 
     } else {
@@ -766,7 +771,7 @@ class OnboardingServices with ChangeNotifier {
     print("GetCurrentYearLicenseIsPending: ${dataRes}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading = false;
-      notVerifiedProfiles[2].isPendingVerification = dataRes["specialization"];
+      notVerifiedProfiles[2].isPendingVerification = dataRes;
       notifyListeners();
 
     } else {
@@ -805,7 +810,7 @@ class OnboardingServices with ChangeNotifier {
     print("GetCurrentEmploymentIsPending: ${dataRes}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading = false;
-      notVerifiedProfiles[5].isPendingVerification = dataRes["specialization"];
+      notVerifiedProfiles[5].isPendingVerification = dataRes;
       notifyListeners();
 
     } else {
@@ -844,7 +849,7 @@ class OnboardingServices with ChangeNotifier {
     print("GetAdditionalCertificateIsPending: ${dataRes}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading = false;
-      notVerifiedProfiles[3].isPendingVerification = dataRes["specialization"];
+      notVerifiedProfiles[3].isPendingVerification = dataRes;
       notifyListeners();
 
     } else {

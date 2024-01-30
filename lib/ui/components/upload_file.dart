@@ -37,7 +37,7 @@ class _UploadFileCardState extends State<UploadFileCard> {
         radius: Radius.circular(20.h),
         child: Container(
           alignment: Alignment.center,
-          height: 220.h,
+          height: 250.h,
           //margin: EdgeInsets.symmetric(horizontal: 20.h, vertical: 5.h),
             padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 15.h),
             decoration: BoxDecoration(
@@ -67,8 +67,8 @@ class _UploadFileCardState extends State<UploadFileCard> {
                 ),
                 SizedBox(height: 20.h),
                 Container(
-                  height: 50.h,
-                  width: 50.h,
+                  height: 40.h,
+                  width: 40.h,
                   alignment: Alignment.centerRight,
                   decoration: BoxDecoration(
                     color:  AppColors.darkGreen,
@@ -84,7 +84,7 @@ class _UploadFileCardState extends State<UploadFileCard> {
                       elevation: 0,
                       backgroundColor: AppColors.darkGreen,
                       foregroundColor: AppColors.white,
-                      fixedSize: Size(30.h, 30.h),
+                      fixedSize: Size(20.h, 20.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
                       ),

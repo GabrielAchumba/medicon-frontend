@@ -5,7 +5,7 @@ import 'package:medicon/services/api_services/api_provider.dart';
 import 'package:medicon/services/auth_services/auth_provider.dart';
 import 'package:medicon/services/common/file_storage_service.dart';
 import 'package:medicon/services/onboarding_services/onboarding_service.dart';
-import 'package:medicon/services/unique/user_service.dart';
+import 'package:medicon/services/user_services/user_service.dart';
 import 'package:medicon/ui/pages/auth/splash_view.dart';
 import 'package:provider/provider.dart';
 

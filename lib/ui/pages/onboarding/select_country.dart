@@ -81,13 +81,12 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                           ),
                         );
                         if (res != null) {
-                          country.text = res.country;
-                          //code.text = res.code!;
-                          //selectedCountry = res.sId!;
+                          provider.setUserCountry(res.country);
+                          country.text = provider.userCountry;
                         }
                         setState(() {});
                       },
-                      suffix: Column(
+                      suffixIcon: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
@@ -115,13 +114,12 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                     ),
                   );
                   if (res != null) {
-                    country.text = res.country;
-                    //code.text = res.code!;
-                    //selectedCountry = res.sId!;
+                    provider.setUserCountry(res.country);
+                    country.text = provider.userCountry;
                   }
                   setState(() {});
                 },
-                suffix: Column(
+                suffixIcon: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(

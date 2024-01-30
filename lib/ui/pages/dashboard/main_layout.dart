@@ -1,5 +1,5 @@
 import 'package:medicon/ui/components/floating_navbar.dart';
-import 'package:medicon/ui/pages/dashboard/home.dart';
+import 'package:medicon/ui/pages/dashboard/home2.dart';
 import 'package:medicon/ui/components/text_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:medicon/services/user_services/user_service.dart';
@@ -41,7 +41,11 @@ class _MainLayoutState extends State<MainLayout> {
               : FloatingNavBar(
                       items: [
                         FloatingNavBarItem(
-                            img: 'home', page: HomeScreen(fullName: "Gabriel Achumba")),
+                            img: 'home', 
+                            page: HomeScreen2(fullName: "Gabriel Achumba")
+                          ),
+                       /*  FloatingNavBarItem(
+                            img: 'home', page: HomeScreen2(fullName: "Gabriel Achumba")), */
                         FloatingNavBarItem(img: 'message', page: const Placeholder()),
                         FloatingNavBarItem(img: 'main-add', page: const Placeholder()),
                         FloatingNavBarItem(img: 'notification', page: const Placeholder()),
