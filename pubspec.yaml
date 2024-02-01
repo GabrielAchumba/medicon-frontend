@@ -36,6 +36,8 @@ dependencies:
   image_cropper: ^5.0.1
   dotted_border: ^2.1.0
   json_annotation: ^4.8.1
+  flutter_switch: ^0.3.2
+  expandable_page_view: ^1.0.17
 
 dev_dependencies:
   flutter_test:

@@ -9,13 +9,19 @@ class AppointmentCard extends StatefulWidget {
   final String patientProfilePic;
   final String appointmentDate;
   final String appointmentTime;
+  final bool? isGallery;
+  final String description;
+  final String? appointmentNumber;
 
   const AppointmentCard({
     Key? key,
     required this.patientFullName,
     required this.patientProfilePic,
     required this.appointmentDate,
-    required this.appointmentTime
+    required this.appointmentTime,
+    required this.description,
+    this.isGallery = true,
+    this.appointmentNumber = ""
   }) : super(key: key);
 
   @override
@@ -36,8 +42,9 @@ class _AppointmentCardState extends State<AppointmentCard> {
       onTap: () {},
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 15.h),
+         
         decoration: BoxDecoration(
-          color:  AppColors.darkGreen,
+          color:  widget.isGallery == true? AppColors.darkGreen : AppColors.white,
           borderRadius: BorderRadius.circular(30.h),
         ),
         child: Column(
@@ -63,23 +70,31 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       ),
                       children: [
                         TextSpan(
-                            text: 'Pending appointment',
+                            text: widget.description,
                             style: GoogleFonts.rubik(
-                              color: AppColors.white,
+                              color: widget.isGallery == true ? AppColors.white : AppColors.textBlack,
                               fontSize: 12.sp,
                               fontWeight: FontWeight.w200,
                         )),
                       ],
                     ),
                   ),
-                )
+                ),
+                Text(
+                  widget.isGallery == false ? widget.appointmentNumber! : "",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: AppColors.darkGreen,
+                    fontSize: 10.sp,
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 20.h),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 15.h),
               decoration: BoxDecoration(
-                color:  AppColors.white,
+                color:  widget.isGallery == true? AppColors.white : AppColors.grey,
                 borderRadius: BorderRadius.circular(30.h),
               ),
               child:Row(
