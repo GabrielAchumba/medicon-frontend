@@ -17,8 +17,8 @@ class AppointmentService with ChangeNotifier {
   String status = "";
   String message = "";
   List<Appointment>? appointments;
-  String baseUrl = "http://localhost:8000";
-  //String baseUrl = "https://medicon-backend.vercel.app";
+  //String baseUrl = "http://localhost:8000";
+  String baseUrl = "https://medicon-backend.vercel.app";
 
   AppointmentService(){
     appointments = [];

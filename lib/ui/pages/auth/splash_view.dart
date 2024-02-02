@@ -48,9 +48,9 @@ class _SplashViewState extends State<SplashView> {
     if(token == null || token == ""){
       nextPage(context, page: const LandingScreen());
     }
-    /* else if(token.isEmpty == false && isOnbaordingPending == false){
+    else if(token.isEmpty == false && isOnbaordingPending == false){
       nextPageOnly(context, page:  WelcomeScreen(fullName!));
-    } */
+    }
     else{
       //pushReplacement(context, const MainLayout());
       nextPageOnly(context, page:  MainLayout(fullName: fullName!));

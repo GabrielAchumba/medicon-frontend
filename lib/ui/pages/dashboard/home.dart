@@ -277,48 +277,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 20.h),
-                      ListView.builder(
-                              itemCount: recentConsultations().length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index){
-                                return AppointmentCard(
-                                  patientFullName: recentConsultations()[index].patientFullName,
-                                  patientProfilePic: recentConsultations()[index].patientProfilePic,
-                                  appointmentDate: recentConsultations()[index].appointmentDate,
-                                  appointmentTime: recentConsultations()[index].appointmentTime,
-                                  description: recentConsultations()[index].description,
-                                  isGallery: false,
-                                  appointmentNumber: recentConsultations()[index].appointmentNumber,
-                                );
-                              }
-                            ),
-                      /* Container(
-                        height: 200.h,
-                        margin: EdgeInsets.only(bottom: 10.h),
-                        color: AppColors.grey,
-                        child: Row(
-                          children: [
-                            ListView.builder(
-                              itemCount: recentConsultations().length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index){
-                                return AppointmentCard(
-                                  patientFullName: recentConsultations()[index].patientFullName,
-                                  patientProfilePic: recentConsultations()[index].patientProfilePic,
-                                  appointmentDate: recentConsultations()[index].appointmentDate,
-                                  appointmentTime: recentConsultations()[index].appointmentTime,
-                                  description: recentConsultations()[index].description,
-                                  isGallery: false,
-                                  appointmentNumber: recentConsultations()[index].appointmentNumber,
-                                );
-                              }
-                            ),
-                          ],
-                        ),
-                      ), */
                       SizedBox(height: 80.h),
                     ]
                   ),
